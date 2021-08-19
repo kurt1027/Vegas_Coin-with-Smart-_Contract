@@ -50,7 +50,7 @@
   "sourceMap": "69:367:0:-;;;117:10;94:33;;;;;;;;;;;;;;;;;;;;69:367;8:9:-1;5:2;;;30:1;27;20:12;5:2;69:367:0;;;;;;;",
   "deployedSourceMap": "69:367:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;132:36;;8:9:-1;5:2;;;30:1;27;20:12;5:2;132:36:0;;;;;;;;;;;;;;;;;;;;;;;94:33;;8:9:-1;5:2;;;30:1;27;20:12;5:2;94:33:0;;;;;;;;;;;;;;;;;;;;;;;;;;;328:105;;8:9:-1;5:2;;;30:1;27;20:12;5:2;328:105:0;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;328:105:0;;;;;;;;;;;;;;;;;;;;132:36;;;;:::o;94:33::-;;;;;;;;;;;;;:::o;328:105::-;234:5;;;;;;;;;;;220:19;;:10;:19;;;204:104;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;418:9;391:24;:36;;;;328:105;:::o",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity >=0.4.22 <0.9.0;\r\n\r\ncontract Migrations {\r\n  address public owner = msg.sender;\r\n  uint public last_completed_migration;\r\n\r\n  modifier restricted() {\r\n    require(\r\n      msg.sender == owner,\r\n      \"This function is restricted to the contract's owner\"\r\n    );\r\n    _;\r\n  }\r\n\r\n  function setCompleted(uint completed) public restricted {\r\n    last_completed_migration = completed;\r\n  }\r\n}\r\n",
-  "sourcePath": "F:\\vegas-coins\\vegas smart contract\\vegascoin\\contracts\\Migrations.sol",
+  "sourcePath": "F:\\vegas-coins\\vegas slot machine main\\vegascoin\\contracts\\Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -912,12 +912,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xe20AD3CAF2E50281c810f57ddd998a24C2d4B1ED",
-      "transactionHash": "0x3d64830db1823065b40a8fa5a2fbb31174f5dd57a76501d4fca4e06b2b2feacd"
+      "address": "0x62960F1b6C292Bab0b5406FBe7Aff73782b1b843",
+      "transactionHash": "0xd45affd941fb78bb2affc15f7b413f1bd6a28bd76b00a696293369badc863f7e"
     }
   },
   "schemaVersion": "3.4.2",
-  "updatedAt": "2021-08-11T12:27:48.517Z",
+  "updatedAt": "2021-08-17T11:49:52.898Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

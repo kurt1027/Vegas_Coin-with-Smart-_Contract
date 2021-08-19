@@ -19,20 +19,20 @@ const ganacheSigner = jsonprovider.getSigner();
 })*/
 
 //create instance of TokenMin
-let contract = new ethers.Contract("0x74f3893814330d778b250D89a4013CBF1Ed0519d", abi, jsonprovider )
-contract.balanceOf("0xBfA9EE9d863730c19F793804adfe30FfC7c3ac40")
+let contract = new ethers.Contract("0x9B39C2bcDDf33BAc2D10038df7181310111066C6", abi, jsonprovider )
+contract.balanceOf("0xE5A9E48f46Ed2efC99553d1bae8acD4d325D7748")
 .then(function(bal) {
     console.log(`BalanceOf ${bal}`)
 })
 
-contract.spinSlotMachine(10000000020202)
+contract.spinSlotMachine(999)
 .then(function(results) {
     console.log(`${results[0]}::${results[1]}::${results[2]}`);
 })
  
-//Create Signer.  This is to sign transaction using the user's private key
-//const signer = new ethers.Wallet(ganachePK,jsonprovider)
-//const account = ganacheSigner.connect(jsonprovider)
+// Create Signer.  This is to sign transaction using the user's private key
+// const signer = new ethers.Wallet(ganachePK,jsonprovider)
+// const account = ganacheSigner.connect(jsonprovider)
     
 
 
