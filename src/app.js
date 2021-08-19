@@ -57,7 +57,7 @@ if (millisTill10 < 0) {
 setTimeout(function(){console.log("It's 10am!")}, millisTill10);
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0xAD7958dd7C8645B8eB3F59A5Bcd99962C06a781f", abi, jsonprovider )
+let contract = new ethers.Contract("0x04753Df4b52a918C25742f79aed93435460eA634", abi, jsonprovider )
 contract.balanceOf("0xE5A9E48f46Ed2efC99553d1bae8acD4d325D7748")
 .then(function(bal) {
     // console.log(`BalanceOf ${bal}`)

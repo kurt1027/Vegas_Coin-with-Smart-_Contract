@@ -26654,12 +26654,12 @@
         }
       },
       "links": {},
-      "address": "0xAD7958dd7C8645B8eB3F59A5Bcd99962C06a781f",
-      "transactionHash": "0x0cd6be66dfa40a83c43ac2dec3b39bf4cae756591ea4f3f1819b1906071aa269"
+      "address": "0x04753Df4b52a918C25742f79aed93435460eA634",
+      "transactionHash": "0x5865104de69b1fd4802eb499e3bfd2f683df438bb4b6030030f05705d9b5953b"
     }
   },
   "schemaVersion": "3.4.2",
-  "updatedAt": "2021-08-17T11:49:52.889Z",
+  "updatedAt": "2021-08-19T14:20:56.297Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "TokenMint (visit https://tokenmint.io)\r ",

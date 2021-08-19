@@ -41,12 +41,18 @@
                     <div id="machine1" class="randomizeMachine">    
                         <% for(var i=0; i < randoms1.length; i++) { %>
 
-                          <div style="margin-top:5px"><h1><%= randoms1[i] %></h1></div>
+                          <div style="margin-top:5px">
+                            <h1><%= randoms1[i] %></h1>
+     
+                          </div>
 
                         <% } %>
                     </div>
                   </div>
-                  <!-- <div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div> -->
+                  <div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
+                  <% for(var i=0; i < randoms1.length; i++) { %>
+                      <input type="hidden" id="random1Result<%=i%>" value="<%= randoms1[i] %>">
+                  <% } %>
                 </div>
       
                 <div class="col-sm-4">
@@ -54,13 +60,18 @@
                     <div id="machine2" class="randomizeMachine">
                       <% for(var i=0; i < randoms2.length; i++) { %>
 
-                        <div style="margin-top:5px"><h1><%= randoms2[i] %></h1></div>
+                        <div style="margin-top:5px">
+                          <h1><%= randoms2[i] %></h1>
+                        </div>
 
                       <% } %>
      
                     </div>
                   </div>
-                  <!-- <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div> -->
+                  <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
+                  <% for(var i=0; i < randoms2.length; i++) { %>
+                      <input type="hidden" id="random2Result<%=i%>" value="<%= randoms2[i] %>">
+                  <% } %>
                 </div>
       
                 <div class="col-sm-4">
@@ -68,13 +79,18 @@
                     <div id="machine3" class="randomizeMachine">
                       <% for(var i=0; i < randoms3.length; i++) { %>
 
-                        <div style="margin-top:5px"><h1><%= randoms3[i] %></h1></div>
+                        <div style="margin-top:5px">
+                          <h1><%= randoms3[i] %></h1>
+                        </div>
 
                       <% } %>
  
                     </div>
                   </div>
-                  <!-- <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div> -->
+                  <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>
+                  <% for(var i=0; i < randoms3.length; i++) { %>
+                      <input type="hidden" id="random3Result<%=i%>" value="<%= randoms3[i] %>">
+                  <% } %>
                 </div>
               
                 <div class="btn-group btn-group-justified" role="group">
@@ -101,8 +117,43 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
-       
     <script id="codeScript2">
+      const btn = document.querySelector('#randomizeButton');
+      const results = {
+        machine1: document.querySelector('#machine1Result'),
+        machine2: document.querySelector('#machine2Result'),
+        machine3: document.querySelector('#machine3Result')
+      };
+      const el1 = document.querySelector('#machine1');
+      const el2 = document.querySelector('#machine2');
+      const el3 = document.querySelector('#machine3');
+      const machine1 = new SlotMachine(el1, { active: 0 });
+      const machine2 = new SlotMachine(el2, { active: 1 });
+      const machine3 = new SlotMachine(el3, { active: 2 });
+      var i = 1;
+      function onComplete(active){
+        results[this.element.id].innerText = `Index: ${this.active}`;
+        var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
+        
+        if(!localStorage.getItem("slot"+i+"_storage")){
+          localStorage.setItem("slot"+i+"_storage", randomResult);
+        } 
+
+        if(i < 3) {
+          i++;
+        } else {
+          i=1;
+        }
+        
+      }
+      
+      btn.addEventListener('click', () => {
+        machine1.shuffle(5, onComplete);
+        setTimeout(() => machine2.shuffle(5, onComplete), 500);
+        setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+      });
+    </script>
+    <!-- <script id="codeScript2">
       const btn = document.querySelector('#randomizeButton');
 
       const el1 = document.querySelector('#machine1');
@@ -113,7 +164,11 @@
       const machine3 = new SlotMachine(el3, { active: 2 });
 
       function onComplete(active){
-        // results[this.element.id].innerText = `Index: ${this.active}`;
+        console.log(this.active);
+        // localStorage.setItem("random1Result", this.active);
+        // localStorage.setItem("random1Result", this.active);
+        // localStorage.setItem("random1Result", this.active);
+        results[this.element.id].innerText = `Index: ${this.active}`;
       }
 
       btn.addEventListener('click', () => {
@@ -121,7 +176,7 @@
         setTimeout(() => machine2.shuffle(5, onComplete), 500);
         setTimeout(() => machine3.shuffle(5, onComplete), 1000);
       });
-          </script>
+          </script> -->
 
 
         <script>
