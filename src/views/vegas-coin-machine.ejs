@@ -42,7 +42,8 @@
                         <% for(var i=0; i < randoms1.length; i++) { %>
 
                           <div style="margin-top:5px">
-                            <h1><%= randoms1[i] %></h1>
+                            <img src="img/AirDrop.png" width="100%"/>
+                            <!-- <h1><%= randoms1[i] %></h1> -->
      
                           </div>
 
@@ -61,7 +62,8 @@
                       <% for(var i=0; i < randoms2.length; i++) { %>
 
                         <div style="margin-top:5px">
-                          <h1><%= randoms2[i] %></h1>
+                          <img src="img/Burn.png" width="100%"/>
+                          <!-- <h1><%= randoms2[i] %></h1> -->
                         </div>
 
                       <% } %>
@@ -80,7 +82,8 @@
                       <% for(var i=0; i < randoms3.length; i++) { %>
 
                         <div style="margin-top:5px">
-                          <h1><%= randoms3[i] %></h1>
+                          <img src="img/Mint.png" width="100%"/>
+                          <!-- <h1><%= randoms3[i] %></h1> -->
                         </div>
 
                       <% } %>
@@ -131,6 +134,7 @@
       const machine2 = new SlotMachine(el2, { active: 1 });
       const machine3 = new SlotMachine(el3, { active: 2 });
       var i = 1;
+      
       function onComplete(active){
         results[this.element.id].innerText = `Index: ${this.active}`;
         var randomResult = document.getElementById("random"+i+"Result"+this.active).value;

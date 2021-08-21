@@ -57,7 +57,7 @@ if (millisTill10 < 0) {
 setTimeout(function(){console.log("It's 10am!")}, millisTill10);
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0x04753Df4b52a918C25742f79aed93435460eA634", abi, jsonprovider )
+let contract = new ethers.Contract("0xd9Ee34A6c6cA16535AE1405376d82F6e8b3041Cf", abi, jsonprovider )
 contract.balanceOf("0xE5A9E48f46Ed2efC99553d1bae8acD4d325D7748")
 .then(function(bal) {
     // console.log(`BalanceOf ${bal}`)
@@ -70,7 +70,7 @@ contract.balanceOf("0xE5A9E48f46Ed2efC99553d1bae8acD4d325D7748")
     // });
 })
 
-contract.spinSlotMachine(9999)
+contract.spinSlotMachine(6666)
 .then(function(results) {
     var randoms1 = results[0]+ ''.split();
     var randoms2 = results[1]+ ''.split();
@@ -79,7 +79,7 @@ contract.spinSlotMachine(9999)
     // console.log(random1[0]);
 
     app.get("/", (req, res) => {
-        res.render('vegas-coin-machine',{ randoms1: randoms1, randoms2: randoms2, randoms3: randoms3 })
+        res.render('vegas-coin-machine',{ randoms0: randoms1, randoms2: randoms2, randoms3: randoms3 })
     //   res.sendFile(__dirname + '//index.html');
     //   res.send("Hello world!!!");
 
