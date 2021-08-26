@@ -50,7 +50,7 @@
   "sourceMap": "69:367:0:-;;;117:10;94:33;;;;;;;;;;;;;;;;;;;;69:367;8:9:-1;5:2;;;30:1;27;20:12;5:2;69:367:0;;;;;;;",
   "deployedSourceMap": "69:367:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;132:36;;8:9:-1;5:2;;;30:1;27;20:12;5:2;132:36:0;;;;;;;;;;;;;;;;;;;;;;;94:33;;8:9:-1;5:2;;;30:1;27;20:12;5:2;94:33:0;;;;;;;;;;;;;;;;;;;;;;;;;;;328:105;;8:9:-1;5:2;;;30:1;27;20:12;5:2;328:105:0;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;328:105:0;;;;;;;;;;;;;;;;;;;;132:36;;;;:::o;94:33::-;;;;;;;;;;;;;:::o;328:105::-;234:5;;;;;;;;;;;220:19;;:10;:19;;;204:104;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;418:9;391:24;:36;;;;328:105;:::o",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity >=0.4.22 <0.9.0;\r\n\r\ncontract Migrations {\r\n  address public owner = msg.sender;\r\n  uint public last_completed_migration;\r\n\r\n  modifier restricted() {\r\n    require(\r\n      msg.sender == owner,\r\n      \"This function is restricted to the contract's owner\"\r\n    );\r\n    _;\r\n  }\r\n\r\n  function setCompleted(uint completed) public restricted {\r\n    last_completed_migration = completed;\r\n  }\r\n}\r\n",
-  "sourcePath": "F:\\vegas-coins\\vegas slot machine main\\vegascoin\\contracts\\Migrations.sol",
+  "sourcePath": "F:\\Vegas -Project\\Vegas_Coin-with-Smart-_Contract\\contracts\\Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -912,12 +912,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xd6Eb276E17266a941349F3A6119072961D82b043",
-      "transactionHash": "0xe01514dcfefb176efcbeaade01ebd75f1570f6d59c19bfd9740f105dec0a6014"
+      "address": "0x960df8A7eF3DDd62f7c014F7fA01Ea761C5A0d49",
+      "transactionHash": "0x10d480dc2e7a55c61e7a57745def825e55a2cf867c1ac2153dd20627f90e2329"
     }
   },
-  "schemaVersion": "3.4.2",
-  "updatedAt": "2021-08-21T13:50:40.028Z",
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-08-26T14:31:56.887Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
