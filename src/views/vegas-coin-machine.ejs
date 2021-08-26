@@ -41,11 +41,23 @@
                     <div id="machine1" class="randomizeMachine">    
                         <% for(var i=0; i < randoms1.length; i++) { %>
 
-                          <div style="margin-top:5px">
-                            <img src="img/AirDrop.png" width="100%"/>
-                            <!-- <h1><%= randoms1[i] %></h1> -->
-     
-                          </div>
+                          <% if(i === 0) { %>
+                            <div style="margin-top:5px">
+                              <img src="img/AirDrop.png" width="100%"/>     
+                            </div>
+  
+                          <% } else if(i===1) { %>
+                            <div style="margin-top:5px">
+                              <img src="img/Burn.png" width="100%"/>
+                              <!-- <h1><%= randoms2[i] %></h1> -->
+                            </div>
+                          <% } else { %>
+                            <div style="margin-top:5px">
+                              <img src="img/Mint.png" width="100%"/>
+                              <!-- <h1><%= randoms3[i] %></h1> -->
+                            </div>
+                          <% } %>
+                         
 
                         <% } %>
                     </div>
@@ -61,17 +73,29 @@
                     <div id="machine2" class="randomizeMachine">
                       <% for(var i=0; i < randoms2.length; i++) { %>
 
-                        <div style="margin-top:5px">
-                          <img src="img/Burn.png" width="100%"/>
-                          <!-- <h1><%= randoms2[i] %></h1> -->
-                        </div>
+                        <% if (i === 0) { %>
+                            <div style="margin-top:5px">
+                              <img src="img/AirDrop.png" width="100%"/>     
+                            </div>
+  
+                          <% } else if (i===1) { %>
+                            <div style="margin-top:5px">
+                              <img src="img/Burn.png" width="100%"/>
+                              <!-- <h1><%= randoms2[i] %></h1> -->
+                            </div>
+                          <% } else { %>
+                            <div style="margin-top:5px">
+                              <img src="img/Mint.png" width="100%"/>
+                              <!-- <h1><%= randoms3[i] %></h1> -->
+                            </div>
+                          <% } %>
 
                       <% } %>
      
                     </div>
                   </div>
                   <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
-                  <% for(var i=0; i < randoms2.length; i++) { %>
+                  <% for (var i=0; i < randoms2.length; i++) { %>
                       <input type="hidden" id="random2Result<%=i%>" value="<%= randoms2[i] %>">
                   <% } %>
                 </div>
@@ -81,10 +105,21 @@
                     <div id="machine3" class="randomizeMachine">
                       <% for(var i=0; i < randoms3.length; i++) { %>
 
-                        <div style="margin-top:5px">
-                          <img src="img/Mint.png" width="100%"/>
-                          <!-- <h1><%= randoms3[i] %></h1> -->
-                        </div>
+                        <% if(i === 0) { %>
+                          <div style="margin-top:5px">
+                            <img src="img/AirDrop.png" width="100%"/>     
+                          </div>
+
+                        <% } else if(i===1) { %>
+                          <div style="margin-top:5px">
+                            <img src="img/Burn.png" width="100%"/>
+                            <!-- <h1><%= randoms2[i] %></h1> -->
+                          </div>
+                        <% } else { %>
+                          <div style="margin-top:5px">
+                            <img src="img/Mint.png" width="100%"/>
+                          </div>
+                        <% } %>
 
                       <% } %>
  
