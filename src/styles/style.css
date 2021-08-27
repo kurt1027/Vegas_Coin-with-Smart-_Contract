@@ -21,9 +21,9 @@ code {
   border-radius: 5px;
 }
 
-.well p {
+/* .well p {
   font-size:
-}
+} */
 
 .btn-group-justified {
   margin: 0 auto;
@@ -35,8 +35,9 @@ h1 {
 }
 
 .container {
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  
 }
 
 a{
@@ -161,12 +162,20 @@ header a {
   background-image: linear-gradient(black, rgb(251 189 24));
   border-top: 20px solid black;
   border-radius: 25px;
+  width: 90;
 }
 
+#randomize .row {
+  padding-top: 2px;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+
 #randomize .row > div.col-sm-4 > div {
-  padding: 40px;
-  width: 180px;
-  height: 180px;
+  padding: 10px;
+  width: 120px;
+  height: 120px;
   background: white;
   border-radius: 50%;
   margin-left: auto;
@@ -176,10 +185,10 @@ header a {
 }
 
 #randomize .row > div.col-xs-4 > div {
-  padding-top: 40px;
-  padding-left: 40px;
-  width: 175px;
-  height: 175px;
+  padding-top: 10px;
+  padding-left: 10px;
+  width: 50px;
+  height: 50px;
   background-color: #fff;
   border-radius: 50%;
   margin: auto;
@@ -205,6 +214,16 @@ header a {
   background: transparent !important;
   font-size: 18px;
   padding: 10px !important;
+}
+
+.card {
+  width: 83%;
+  left: 92px;
+  border-width: 3px;
+}
+
+.card-body {
+  padding: 10px;
 }
 
 /*
