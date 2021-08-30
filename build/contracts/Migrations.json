@@ -50,7 +50,7 @@
   "sourceMap": "69:367:0:-;;;117:10;94:33;;;;;;;;;;;;;;;;;;;;69:367;8:9:-1;5:2;;;30:1;27;20:12;5:2;69:367:0;;;;;;;",
   "deployedSourceMap": "69:367:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;132:36;;8:9:-1;5:2;;;30:1;27;20:12;5:2;132:36:0;;;;;;;;;;;;;;;;;;;;;;;94:33;;8:9:-1;5:2;;;30:1;27;20:12;5:2;94:33:0;;;;;;;;;;;;;;;;;;;;;;;;;;;328:105;;8:9:-1;5:2;;;30:1;27;20:12;5:2;328:105:0;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;328:105:0;;;;;;;;;;;;;;;;;;;;132:36;;;;:::o;94:33::-;;;;;;;;;;;;;:::o;328:105::-;234:5;;;;;;;;;;;220:19;;:10;:19;;;204:104;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;418:9;391:24;:36;;;;328:105;:::o",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity >=0.4.22 <0.9.0;\r\n\r\ncontract Migrations {\r\n  address public owner = msg.sender;\r\n  uint public last_completed_migration;\r\n\r\n  modifier restricted() {\r\n    require(\r\n      msg.sender == owner,\r\n      \"This function is restricted to the contract's owner\"\r\n    );\r\n    _;\r\n  }\r\n\r\n  function setCompleted(uint completed) public restricted {\r\n    last_completed_migration = completed;\r\n  }\r\n}\r\n",
-  "sourcePath": "F:\\Vegas -Project\\Vegas_Coin-with-Smart-_Contract\\contracts\\Migrations.sol",
+  "sourcePath": "F:\\vegas-coins\\vegas-coins-dm-branch\\Vegas_Coin-with-Smart-_Contract\\contracts\\Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -912,12 +912,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x78432359AA9677E8643c90368A355185B755A18d",
-      "transactionHash": "0xbde38f3a4ebeb56ab853b3f323d9d609929d69cc3c6dc309ff6c3377a9aa84ba"
+      "address": "0x478cAfe4c6db8a010FBe4B68E5BfEf4e5224b04C",
+      "transactionHash": "0x9e8d597514960941376299bc50228a30c0e5c1230d0872815cea07b7eb22740c"
     }
   },
-  "schemaVersion": "3.4.3",
-  "updatedAt": "2021-08-30T10:50:04.811Z",
+  "schemaVersion": "3.4.2",
+  "updatedAt": "2021-08-30T14:27:36.781Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
