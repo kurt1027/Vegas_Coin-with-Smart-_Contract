@@ -161,8 +161,7 @@ header a {
   /* background-color: #EB6B56; */
   background-image: linear-gradient(black, rgb(251 189 24));
   border-top: 20px solid black;
-  border-radius: 25px;
-  width: 90;
+  border-radius: 17px;
 }
 
 #randomize .row {
@@ -173,7 +172,7 @@ header a {
 
 
 #randomize .row > div.col-sm-4 > div {
-  padding: 10px;
+  padding: 8px;
   width: 120px;
   height: 120px;
   background: white;
@@ -217,13 +216,15 @@ header a {
 }
 
 .card {
-  width: 83%;
-  left: 92px;
+  max-width: 83%;
+  margin: auto;
   border-width: 3px;
+  border-radius: 17px;
+ 
 }
 
 .card-body {
-  padding: 10px;
+  padding: 6px;
 }
 
 /*

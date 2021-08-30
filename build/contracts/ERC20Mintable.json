@@ -26436,7 +26436,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-08-27T15:00:38.154Z",
+  "updatedAt": "2021-08-30T10:50:01.542Z",
   "devdoc": {
     "details": "Extension of `ERC20` that adds a set of accounts with the `MinterRole`,\r which have permission to mint (create) new tokens as they see fit.\r  * At construction, the deployer of the contract is the only minter.\r",
     "methods": {
