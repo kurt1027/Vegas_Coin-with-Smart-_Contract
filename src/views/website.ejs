@@ -75,7 +75,7 @@
                             <p class="lead">Purchase $VEGASCOIN on Gate.io (startup is TBD)</p>
                         </div>
 
- <%- include('src/../partial_view/slot-machine.ejs') %>  
+                        <%- include('src/../partial_view/slot-machine.ejs') %>  
 
                         <div class="col-sm-10 wow fadeIn" data-wow-delay="0.5s">
                             <div class="pre-sale-timer-outer">
@@ -642,15 +642,18 @@
       const machine2 = new SlotMachine(el2, { active: 1 });
       const machine3 = new SlotMachine(el3, { active: 2 });
       var i = 1;
-      
+      var day = 0;
+      var air_drop_result = 0;
+      var burn_result = 0;
+      var mint_result = 0;
       function onComplete(active){
         results[this.element.id].innerText = `Index: ${this.active}`;
         var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
         
-        if(!localStorage.getItem("slot"+i+"_storage")){
-          localStorage.setItem("slot"+i+"_storage", randomResult);
+        if(!localStorage.getItem("slot"+i+"_storage_day_"+day+"_index_"+this.active)){
+          localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult);
         } 
-
+        
         if(i < 3) {
           i++;
         } else {
@@ -660,9 +663,11 @@
       }
       
       btn.addEventListener('click', () => {
+        
         machine1.shuffle(5, onComplete);
         setTimeout(() => machine2.shuffle(5, onComplete), 500);
         setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+        day++;
       });
     </script>
         <script>
