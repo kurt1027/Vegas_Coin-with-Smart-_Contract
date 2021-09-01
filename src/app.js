@@ -36,9 +36,9 @@ const provider = ethers.getDefaultProvider('kovan', {
     infura: process.env.INFURA_KOVAN
 })
 
-//Loca host Ganache
+//Local host Ganache
 const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:7545`);
-const ganachePK = `9795a3b29fc8418965868b58faa08dbe78d856d82e11a49012aaf6fc7858b217`;
+const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c91155b`;
 const ganacheSigner = jsonprovider.getSigner();
 
 /*jsonprovider.getBlockNumber()
@@ -53,8 +53,9 @@ const ganacheSigner = jsonprovider.getSigner();
 // setTimeout(function(){console.log("It's 10am!")}, millisTill10);
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0x44ecc199a8e08D3a477F10350De83113EEB6B41C", abi, jsonprovider )
-contract.balanceOf("0xE5A9E48f46Ed2efC99553d1bae8acD4d325D7748")
+
+let contract = new ethers.Contract("0xD8F3EeC6DB06Da82040D77C99FdA70F58C5C3A5d", abi, jsonprovider )
+contract.balanceOf("0x79bc53CBcB9A525f34F4eB652DF8F92a34fC4184")
 .then(function(bal) {
     // console.log(`BalanceOf ${bal}`)
     
@@ -67,7 +68,7 @@ contract.balanceOf("0xE5A9E48f46Ed2efC99553d1bae8acD4d325D7748")
 });
 
 Promise.try(function() {
-    return randomNumber(10, 1000);
+    return randomNumber(900, 1000);
 }).then(function(number) {
     contract.spinSlotMachine(number)
     .then(function(results) {

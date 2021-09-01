@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
     <!-- Website Title -->
     <title>Vegas Coin</title>
     <!-- Stylesheets Start -->
@@ -21,10 +22,24 @@
     <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css"/>
     <link rel="stylesheet" href="style.css" type="text/css"/>
     <link rel="stylesheet" href="/css/responsive.css" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../styles/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../dist/jquery.slotmachine.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
      <!-- Stylesheets End -->
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
-
+    <style>
+        h1 {
+          font-family: 'Poppins', sans-serif;
+        }
+  
+        body {
+          background-color: black;
+        }
+        </style>
 </head>
 <body>
     <!--Main Wrapper Start-->
@@ -75,7 +90,7 @@
                             <p class="lead">Purchase $VEGASCOIN on Gate.io (startup is TBD)</p>
                         </div>
 
- <%- include('src/../partial_view/slot-machine.ejs') %>  
+                        <%- include('src/../partial_view/slot-machine.ejs') %>  
 
                         <div class="col-sm-10 wow fadeIn" data-wow-delay="0.5s">
                             <div class="pre-sale-timer-outer">
@@ -109,6 +124,8 @@
                             </div>
 
                             </div>
+
+                            <%- include('src/../partial_view/roulette.ejs') %> 
                         </div>
                     </div>
                 </div>
@@ -543,7 +560,7 @@
             <div class="brand-logo-slider">
                 <div class="container">
                     <div class="brand-logos owl-carousel">
-                        <div class="item"><img src="/images/brand-logo1.png" alt="Brand Logo 1" /></div>
+                        <div class="item"><img src="../images/brand-logo1.png" alt="Brand Logo 1" /></div>
                         <div class="item"><img src="/images/brand-logo2.png" alt="Brand Logo 2" /></div>
                         <div class="item"><img src="/images/brand-logo5.png" alt="Brand Logo 5" /></div>
                         <div class="item"><img src="/images/brand-logo4.png" alt="Brand Logo 4" /></div>
@@ -642,15 +659,18 @@
       const machine2 = new SlotMachine(el2, { active: 1 });
       const machine3 = new SlotMachine(el3, { active: 2 });
       var i = 1;
-      
+      var day = 0;
+      var air_drop_result = 0;
+      var burn_result = 0;
+      var mint_result = 0;
       function onComplete(active){
         results[this.element.id].innerText = `Index: ${this.active}`;
         var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
         
-        if(!localStorage.getItem("slot"+i+"_storage")){
-          localStorage.setItem("slot"+i+"_storage", randomResult);
+        if(!localStorage.getItem("slot"+i+"_storage_day_"+day+"_index_"+this.active)){
+          localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult);
         } 
-
+        
         if(i < 3) {
           i++;
         } else {
@@ -660,9 +680,11 @@
       }
       
       btn.addEventListener('click', () => {
+        
         machine1.shuffle(5, onComplete);
         setTimeout(() => machine2.shuffle(5, onComplete), 500);
         setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+        day++;
       });
     </script>
         <script>
