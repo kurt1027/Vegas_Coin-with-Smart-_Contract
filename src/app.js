@@ -53,7 +53,7 @@ const ganacheSigner = jsonprovider.getSigner();
 // setTimeout(function(){console.log("It's 10am!")}, millisTill10);
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0x61AD139634B53DC67B75A4738836a8FC80a3Da10", abi, jsonprovider )
+let contract = new ethers.Contract("0x5210bBAdC6Ea21386646093d291Ff2491dd81999", abi, jsonprovider )
 contract.balanceOf("0xE5A9E48f46Ed2efC99553d1bae8acD4d325D7748")
 .then(function(bal) {
     // console.log(`BalanceOf ${bal}`)

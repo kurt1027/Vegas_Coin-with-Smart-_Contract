@@ -642,18 +642,37 @@
       const machine2 = new SlotMachine(el2, { active: 1 });
       const machine3 = new SlotMachine(el3, { active: 2 });
       var i = 1;
+      var dateNow = Date.now();
       var day = 0;
-      var air_drop_result = 0;
-      var burn_result = 0;
-      var mint_result = 0;
+      var current_airdrop_total = 0;
+      var air_drop_result = 0;//7
+
       function onComplete(active){
         results[this.element.id].innerText = `Index: ${this.active}`;
         var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
-        
         if(!localStorage.getItem("slot"+i+"_storage_day_"+day+"_index_"+this.active)){
-          localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult);
+            
+            localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult)
+
+            current_airdrop_total = localStorage.getItem("air_drop_total_result") == null ? 0 : localStorage.getItem("air_drop_total_result");
+            console.log("air drop result: "+ air_drop_result);
+            air_drop_result = this.active == 0 ? +randomResult + +air_drop_result : +air_drop_result + +0;
+
+            console.log("index: "+ this.active);
+            console.log(air_drop_result);
+
+            
+          
+
         } 
-        
+        if(day >7) {
+            air_drop_result = 0;
+            day = 0;
+
+            console.log("Here")
+        } else {
+            localStorage.setItem("airdrop_total", air_drop_result)
+        }
         if(i < 3) {
           i++;
         } else {
@@ -666,8 +685,11 @@
         
         machine1.shuffle(5, onComplete);
         setTimeout(() => machine2.shuffle(5, onComplete), 500);
-        setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+        setTimeout(() => machine3.shuffle(5, onComplete), 1000  );
         day++;
+
+        burn_result = 0;
+        mint_result = 0;
       });
     </script>
         <script>
@@ -678,6 +700,7 @@
 
       });
       hljs.initHighlightingOnLoad();
+      
     </script>
     
 </body>
