@@ -26126,8 +26126,9 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.2",
-  "updatedAt": "2021-09-03T15:38:16.022Z",
+
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-09-01T10:08:39.260Z",
   "devdoc": {
     "details": "Library for managing addresses assigned to a Role.\r",
     "methods": {},

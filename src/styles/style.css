@@ -225,6 +225,7 @@ header a {
 
 .card-body {
   padding: 6px;
+  
 }
 
 /*
@@ -362,6 +363,22 @@ footer{
   /* background-color: #EB6B56; */
   background-image: linear-gradient(black, rgb(251 189 24));
   border-top: 20px solid black;
-  border-radius: 25px;
+  border-radius: 17px;
+  height: 550px;
+  max-width: 900px;
+  margin: 6px;  
 }
+
+#wheelcanvas {
+  height: 400px;
+  width: 400px;
+}
+
+.form-control {
+  width: 400px;
+  height: 40px;
+}
+
+
+
 .github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}

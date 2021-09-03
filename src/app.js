@@ -36,7 +36,7 @@ const provider = ethers.getDefaultProvider('kovan', {
     infura: process.env.INFURA_KOVAN
 })
 
-//Loca host Ganache
+//Local host Ganache
 const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:7545`);
 const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c91155b`;
 const ganacheSigner = jsonprovider.getSigner();
@@ -68,7 +68,7 @@ contract.balanceOf("0x79bc53CBcB9A525f34F4eB652DF8F92a34fC4184")
 });
 
 Promise.try(function() {
-    return randomNumber(10, 1000);
+    return randomNumber(900, 1000);
 }).then(function(number) {
     contract.spinSlotMachine(number)
     .then(function(results) {
