@@ -79,7 +79,7 @@
         <!-- Content Section Start -->
         <div class="midd-container">
             <!-- Hero Section Start -->
-            <div class="hero-main layout-3 white-sec" style="background-image:url('/images/banner.jpg');">
+            <div class="hero-main layout-3 white-sec" style="background-image:url('/images/banner.jpg');height:100%">
                 <div id="gold-tech-bg"></div>
                 <div class="container">
                     <div class="row justify-content-center">
@@ -123,10 +123,9 @@
                                 </div>
                             </div>
 
-                            </div>
-
-                            <%- include('src/../partial_view/roulette.ejs') %> 
                         </div>
+                        <br>
+                        <%- include('src/../partial_view/roulette.ejs') %> 
                     </div>
                 </div>
             </div>
@@ -319,9 +318,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="empty-45"></div>
-                            <div class="sec-title text-center">
-                                </div>
-                            </div>
+                            <div class="sec-title text-center"></div>
                         </div>
                     </div>
                 </div>
@@ -663,53 +660,88 @@
       var day = 0;
       var current_airdrop_total = 0;
       var air_drop_result = 0;//7
+      var burn_result = 0;//7
+      var mint_result = 0;//7
+      var actions = [];
+      var dominantAction;
+        function onComplete(active){
+            results[this.element.id].innerText = `Index: ${this.active}`;
+            var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
+            // if(!localStorage.getItem("slot"+i+"_storage_day_"+day+"_index_"+this.active)){
+                
+                localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult)
 
-      function onComplete(active){
-        results[this.element.id].innerText = `Index: ${this.active}`;
-        var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
-        if(!localStorage.getItem("slot"+i+"_storage_day_"+day+"_index_"+this.active)){
+                air_drop_result = this.active == 0 ? +randomResult + +air_drop_result : +air_drop_result + +0;
+                burn_result = this.active == 1 ? +randomResult + +burn_result : +burn_result + +0;
+                mint_result = this.active == 2 ? +randomResult + +mint_result : +mint_result + +0;
+
+
+            // } 
+
+     
+                localStorage.setItem("airdrop_total", air_drop_result)
+                localStorage.setItem("burn_result", burn_result)
+                localStorage.setItem("mint_result", mint_result)
             
-            localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult)
-
-            current_airdrop_total = localStorage.getItem("air_drop_total_result") == null ? 0 : localStorage.getItem("air_drop_total_result");
-            console.log("air drop result: "+ air_drop_result);
-            air_drop_result = this.active == 0 ? +randomResult + +air_drop_result : +air_drop_result + +0;
-
-            console.log("index: "+ this.active);
-            console.log(air_drop_result);
-
+            if(i < 3) {
+            i++;
+            } else {
+            i=1;
+            }
             
-          
-
-        } 
-        if(day >7) {
-            air_drop_result = 0;
-            day = 0;
-
-            console.log("Here")
-        } else {
-            localStorage.setItem("airdrop_total", air_drop_result)
         }
-        if(i < 3) {
-          i++;
-        } else {
-          i=1;
-        }
-        
-      }
       
-      btn.addEventListener('click', () => {
-        
-        machine1.shuffle(5, onComplete);
-        setTimeout(() => machine2.shuffle(5, onComplete), 500);
-        setTimeout(() => machine3.shuffle(5, onComplete), 1000  );
-        day++;
+        btn.addEventListener('click', () => {
+            
+            if(day == 7) {
+                localStorage.setItem("airdrop_total"+dateNow, air_drop_result);
+                localStorage.setItem("burn_total"+dateNow, burn_result);
+                localStorage.setItem("mint_total"+dateNow, mint_result);
+                actions.push(air_drop_result, burn_result, mint_result);
+                dominantAction = whichIsTheGreatest(actions);
+                document.getElementById("actionResult").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
+                document.getElementById("actionResultRoullete").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
 
-        burn_result = 0;
-        mint_result = 0;
-      });
+                reset();
+            } else {
+                day++;
+                machine1.shuffle(5, onComplete);
+                setTimeout(() => machine2.shuffle(5, onComplete), 500);
+                setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+                
+            }
+            
+        });
+
+        function whichIsTheGreatest(numericValues) {
+
+            console.log(numericValues);
+
+            var max = -Infinity; // calling Math.max with no arguments returns -Infinity
+            var maxName = null;
+            for (var key in numericValues) {
+                var num = numericValues[key];
+
+                if (num > max) {
+                    max = num;
+                    maxName = key;
+                }
+
+                max = (num > max && num) || max;
+            }
+
+            return maxName;
+        }
+        function reset() {
+            day = 0;
+            air_drop_result = 0;
+            burn_result = 0;
+            mint_result = 0;
+            actions =[];
+        }
+      
     </script>
-        <script>
+    <script>
 
       [1, 2, 3, 4, 5, 6].forEach((index) => {
         const script = document.querySelector(`#codeScript${index}`);
@@ -719,6 +751,254 @@
       hljs.initHighlightingOnLoad();
       
     </script>
-    
+    <script type="application/javascript">
+        var colors = ["green", "black", "red", "black", "red",
+                     "black", "red", "black", "red", "black", "red", "black", "red",
+                     "black", "red", "black", "red", "black", "red", "green", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black"];
+        var number = ["0", "28", "9", "26",
+                           "30", "11", "7", "20",
+                           "32", "17", "5", "22", "34", "15", "3", "24", "36", "13", "1", "00", "27", "10", "25", "29", "12", "8", "19", "31", "18", "6", "21", "33", "16", "4", "23", "35", "14", "2"];
+        
+        var startAngle = 0;
+        var arc = Math.PI / 19;
+        var spinTimeout = null;
+        var answer;
+        var total = 1000;
+        
+        var spinArcStart = 10;
+        var spinTime = 0;
+        var spinTimeTotal = 0;
+        
+        var ctx;
+        
+        function draw() {
+          drawRouletteWheel();
+        }
+        
+        function drawRouletteWheel() {
+          var canvas = document.getElementById("wheelcanvas");
+          if (canvas.getContext) {
+            var outsideRadius = 220;
+            var textRadius = 180;
+            var insideRadius = 150;
+            
+            ctx = canvas.getContext("2d");
+            ctx.clearRect(0,0,500,500);
+            
+            
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 10;
+            
+            ctx.font = 'bold 20px Arial';
+            
+            for(var i = 0; i < 38; i++) {
+              var angle = startAngle + i * arc;
+              ctx.fillStyle = colors[i];
+              
+              ctx.beginPath();
+              ctx.arc(250, 250, outsideRadius, angle, angle + arc, false);
+              ctx.arc(250, 250, insideRadius, angle + arc, angle, true);
+              ctx.stroke();
+              ctx.fill();
+              
+              ctx.save();
+              ctx.shadowOffsetX = -1;
+              ctx.shadowOffsetY = -1;
+              ctx.shadowBlur    = 0;
+              ctx.fillStyle = "#FFF";
+              ctx.translate(250 + Math.cos(angle + arc / 2) * textRadius, 250 + Math.sin(angle + arc / 2) * textRadius);
+              ctx.rotate(angle + arc / 2 + Math.PI / 2);
+              var text = number[i];
+              ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+              ctx.restore();
+            } 
+            
+            //Arrow
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.moveTo(250 - 4, 250 - (outsideRadius + 5));
+            ctx.lineTo(250 + 4, 250 - (outsideRadius + 5));
+            ctx.lineTo(250 + 4, 250 - (outsideRadius - 5));
+            ctx.lineTo(250 + 9, 250 - (outsideRadius - 5));
+            ctx.lineTo(250 + 0, 250 - (outsideRadius - 13));
+            ctx.lineTo(250 - 9, 250 - (outsideRadius - 5));
+            ctx.lineTo(250 - 4, 250 - (outsideRadius - 5));
+            ctx.lineTo(250 - 4, 250 - (outsideRadius + 5));
+            ctx.fill();
+          }
+        }
+        
+        function spin() {
+          spinAngleStart = Math.random() * 10 + 10;
+          spinTime = 0;
+          spinTimeTotal = Math.random() * 3 + 4 * 1000;
+          rotateWheel();
+        }
+        
+        function rotateWheel() {
+          spinTime += 30;
+          if(spinTime >= spinTimeTotal) {
+            stopRotateWheel();
+            return;
+          }
+          var spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+          startAngle += (spinAngle * Math.PI / 180);
+          drawRouletteWheel();
+          spinTimeout = setTimeout('rotateWheel()', 30);
+        }
+        
+        function stopRotateWheel() {
+          clearTimeout(spinTimeout);
+          var degrees = startAngle * 180 / Math.PI + 90;
+          var arcd = arc * 180 / Math.PI;
+          var index = Math.floor((360 - degrees % 360) / arcd);
+          ctx.save();
+          ctx.font = 'bold 60px Arial';
+          var text = '0.00'+number[index];
+        answer = text;
+          ctx.fillText(text, 250 - ctx.measureText(text).width / 2, 250 + 10);
+        checkwin();
+          ctx.restore();
+        }
+        
+        function easeOut(t, b, c, d) {
+          var ts = (t/=d)*t;
+          var tc = ts*t;
+          return b+c*(tc + -3*ts + 3*t);
+        }
+        
+        draw();
+        
+        function putmoney(obj)
+        {
+          if (obj.className != "in")
+          {
+            obj.bgColor = "gray" ;
+            obj.className = "in" ;
+            click += 1 ;
+          }
+          else
+          {
+            obj.bgColor = "#B2E0F0" ;
+            obj.className = "" ;
+            click -= 1 ;
+          }
+        }
+      
+        function checkwin()
+        {
+          if ( answer != 0 && answer != 00 )
+          {
+            for (var i = 1 ; i <= 36 ; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                if (document.getElementById(i).innerHTML == answer)
+                {
+                  total -= 10;
+                  total += 360;
+                }
+                else
+                  total -= 10;
+              }
+            }
+            
+            for (var i = 37 ; i <= 39 ; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                if (i - 36 == answer%3 || answer%3 == 0)
+                {
+                  total -= 10;
+                  total += 30;
+                }
+                else
+                  total -= 10;
+              }
+            }
+            
+            for (var i = 40 ; i <= 42 ; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                if (answer <= i%39*12 && answer >= i%39*12-11)
+                {
+                  total -= 10;
+                  total += 30;
+                }
+                else
+                  total -= 10;
+              }
+            }
+            
+            for (var i = 43 ; i <= 44 ; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                if (answer <= i%42*18 && answer >= i%42*18-17)
+                {
+                  total -= 10;
+                  total += 20;
+                }
+                else
+                  total -= 10;
+              }
+            }
+            
+            for (var i = 45 ; i <= 46 ; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                if (answer%2 == i%2)
+                {
+                  total -= 10;
+                  total += 20;
+                }
+                else
+                  total -= 10;
+              }
+            }
+            
+            for (var i = 47 ; i <= 47 ; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                if(answer == 1 || answer == 3 || answer == 5 || answer == 7 || answer == 9 || answer == 12 || answer == 14 || answer == 16 || answer == 18 || answer == 19 || answer == 21 || answer == 23 || answer == 25 || answer == 27 || answer == 30 || answer == 32 || answer == 34 || answer == 36)
+                {
+                  total -= 10;
+                  total += 20;
+                }
+                else
+                  total -= 10;
+              }				
+            }
+          
+            for (var i = 48 ; i <= 48 ; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                if(answer == 2 || answer == 4 || answer == 6 || answer == 8 || answer == 10 || answer == 11 || answer == 13 || answer == 15 || answer == 17 || answer == 20 || answer == 22 || answer == 24 || answer == 26 || answer == 28 || answer == 29 || answer == 31 || answer == 33 || answer == 35)
+                {
+                  total -= 10;
+                  total += 20;
+                }
+                else
+                  total -= 10;
+              }
+            }
+          }else
+          {
+            for ( var i = 0; i <= 48; i++)
+            {
+              if (document.getElementById(i).className == "in")
+              {
+                total -= 10;
+              }
+            }
+          }
+          document.getElementById("money").innerHTML = "You Have " + total + "$";
+        }
+      
+    </script>
 </body>
 </html>

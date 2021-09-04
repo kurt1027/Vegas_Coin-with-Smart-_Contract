@@ -41,30 +41,11 @@ const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:7545
 const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c91155b`;
 const ganacheSigner = jsonprovider.getSigner();
 
-/*jsonprovider.getBlockNumber()
-.then(function(blknum) {
-    console.log(`${blknum}`);
-})*/
-// var now = new Date();
-// var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0, 0) - now;
-// if (millisTill10 < 0) {
-//      millisTill10 += 86400000; // it's after 10am, try 10am tomorrow.
-// }
-// setTimeout(function(){console.log("It's 10am!")}, millisTill10);
-
 // create instance of TokenMin
-
-let contract = new ethers.Contract("0x509Ddf17C381e4187600F132F5fB9df53Ae0e904", abi, jsonprovider )
+let contract = new ethers.Contract("0xfD789f1D7CaFecaFE6F31bCCadBe570D0791E565", abi, jsonprovider )
 contract.balanceOf("0x79bc53CBcB9A525f34F4eB652DF8F92a34fC4184")
 .then(function(bal) {
-    // console.log(`BalanceOf ${bal}`)
-    
-    // app.get("/", (req, res) => {
-    //     res.render('vegas-coin-machine',{ balanceOf: bal })
-    // //   res.sendFile(__dirname + '//index.html');
-    // //   res.send("Hello world!!!");
-
-    // });
+ 
 });
 
 Promise.try(function() {
