@@ -1,7 +1,6 @@
 {
-  "name": "vegascoin",
+  "name": "c",
   "version": "1.0.0",
-  "description": "",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
@@ -33,5 +32,7 @@
   "bugs": {
     "url": "https://github.com/jaypersanchez/vegascoin/issues"
   },
-  "homepage": "https://github.com/jaypersanchez/vegascoin#readme"
+  "homepage": "https://github.com/jaypersanchez/vegascoin#readme",
+  "keywords": [],
+  "description": ""
 }

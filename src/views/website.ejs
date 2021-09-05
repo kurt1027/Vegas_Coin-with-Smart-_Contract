@@ -643,79 +643,97 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
     <script id="codeScript2">
-      const btn = document.querySelector('#randomizeButton');
-      const results = {
-        machine1: document.querySelector('#machine1Result'),
-        machine2: document.querySelector('#machine2Result'),
-        machine3: document.querySelector('#machine3Result')
-      };
-      const el1 = document.querySelector('#machine1');
-      const el2 = document.querySelector('#machine2');
-      const el3 = document.querySelector('#machine3');
-      const machine1 = new SlotMachine(el1, { active: 0 });
-      const machine2 = new SlotMachine(el2, { active: 1 });
-      const machine3 = new SlotMachine(el3, { active: 2 });
-      var i = 1;
-      var dateNow = Date.now();
-      var day = 0;
-      var current_airdrop_total = 0;
-      var air_drop_result = 0;//7
-      var burn_result = 0;//7
-      var mint_result = 0;//7
-      var actions = [];
-      var dominantAction;
+      
+     
+        const btn = document.querySelector('#randomizeButton');
+        const results = {
+            machine1: document.querySelector('#machine1Result'),
+            machine2: document.querySelector('#machine2Result'),
+            machine3: document.querySelector('#machine3Result')
+        };
+        const el1 = document.querySelector('#machine1');
+        const el2 = document.querySelector('#machine2');
+        const el3 = document.querySelector('#machine3');
+        const machine1 = new SlotMachine(el1, { active: 0 });
+        const machine2 = new SlotMachine(el2, { active: 1 });
+        const machine3 = new SlotMachine(el3, { active: 2 });
+        var i = 1;
+        var dateNow = Date.now();
+        var day = 0;
+        var current_airdrop_total = 0;
+        var air_drop_result = 0;//7
+        var burn_result = 0;//7
+        var mint_result = 0;//7
+        var actions = [];
+        var dominantAction;
+
+        function slotMachineRandomize() {
+            day++;
+
+            machine1.shuffle(5, onComplete);
+            setTimeout(() => machine2.shuffle(5, onComplete), 500);
+            setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+        }
+
         function onComplete(active){
-            results[this.element.id].innerText = `Index: ${this.active}`;
+            // results[this.element.id].innerText = `Index: ${this.active}`;
             var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
             // if(!localStorage.getItem("slot"+i+"_storage_day_"+day+"_index_"+this.active)){
                 
-                localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult)
+            localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult)
 
-                air_drop_result = this.active == 0 ? +randomResult + +air_drop_result : +air_drop_result + +0;
-                burn_result = this.active == 1 ? +randomResult + +burn_result : +burn_result + +0;
-                mint_result = this.active == 2 ? +randomResult + +mint_result : +mint_result + +0;
+            air_drop_result = this.active == 0 ? +randomResult + +air_drop_result : +air_drop_result + +0;
+            burn_result = this.active == 1 ? +randomResult + +burn_result : +burn_result + +0;
+            mint_result = this.active == 2 ? +randomResult + +mint_result : +mint_result + +0;
 
-
-            // } 
-
-     
-                localStorage.setItem("airdrop_total", air_drop_result)
-                localStorage.setItem("burn_result", burn_result)
-                localStorage.setItem("mint_result", mint_result)
+            localStorage.setItem("air_drop_result", air_drop_result)
+            localStorage.setItem("burn_result", burn_result)
+            localStorage.setItem("mint_result", mint_result)
             
             if(i < 3) {
-            i++;
+                i++;
             } else {
-            i=1;
+                console.log("Day: "+day);
+                if (day == 7) {
+                    saveTotalResult();
+                    displaySaveDominantAction();
+                    document.getElementById("rouletteBtn").disabled = false;
+                } 
+                i=1;
             }
             
         }
-      
-        btn.addEventListener('click', () => {
-            
-            if(day == 7) {
-                localStorage.setItem("airdrop_total"+dateNow, air_drop_result);
-                localStorage.setItem("burn_total"+dateNow, burn_result);
-                localStorage.setItem("mint_total"+dateNow, mint_result);
-                actions.push(air_drop_result, burn_result, mint_result);
-                dominantAction = whichIsTheGreatest(actions);
-                document.getElementById("actionResult").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
-                document.getElementById("actionResultRoullete").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
+        function saveTotalResult() {
+            localStorage.setItem("air_drop_result"+dateNow, air_drop_result);
+            localStorage.setItem("burn_total"+dateNow, burn_result);
+            localStorage.setItem("mint_total"+dateNow, mint_result);
+        }
+        function displaySaveDominantAction () {
+            actions.push(air_drop_result, burn_result, mint_result);
+            dominantAction = whichIsTheGreatest(actions);
+            localStorage.setItem("dominant_action", dominantAction);
+            document.getElementById("actionResult").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
+            document.getElementById("actionResultRoullete").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
+            document.getElementById("randomizeButton").disabled = true;
+            // var send = { "airDrop" : air_drop_result, "burn" : burn_result, "mint" : mint_result,dominant : dominantAction};
+            // var sendString = JSON.stringify(send);
 
-                reset();
-            } else {
-                day++;
-                machine1.shuffle(5, onComplete);
-                setTimeout(() => machine2.shuffle(5, onComplete), 500);
-                setTimeout(() => machine3.shuffle(5, onComplete), 1000);
-                
-            }
-            
-        });
+            // var xhr = new XMLHttpRequest();
+            // xhr.open("POST", '/slotMachinResult', true);
 
+            // //Send the proper header information along with the request
+            // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            // xhr.onreadystatechange = function() { // Call a function when the state changes.
+            //     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    
+            //     }
+            // }
+            // xhr.send(sendString);
+        }
         function whichIsTheGreatest(numericValues) {
 
-            console.log(numericValues);
+            // console.log(numericValues);
 
             var max = -Infinity; // calling Math.max with no arguments returns -Infinity
             var maxName = null;
@@ -733,25 +751,19 @@
             return maxName;
         }
         function reset() {
+
             day = 0;
             air_drop_result = 0;
             burn_result = 0;
             mint_result = 0;
             actions =[];
+            localStorage.clear();
+            document.getElementById("randomizeButton").disabled = false;
+            document.getElementById("rouletteBtn").disabled = true;
+            document.getElementById("actionResult").innerHTML = '';
+            document.getElementById("actionResultRoullete").innerHTML = '';
         }
-      
-    </script>
-    <script>
-
-      [1, 2, 3, 4, 5, 6].forEach((index) => {
-        const script = document.querySelector(`#codeScript${index}`);
-        const block = document.querySelector(`#codeBlock${index}`);
-
-      });
-      hljs.initHighlightingOnLoad();
-      
-    </script>
-    <script type="application/javascript">
+        
         var colors = ["green", "black", "red", "black", "red",
                      "black", "red", "black", "red", "black", "red", "black", "red",
                      "black", "red", "black", "red", "black", "red", "green", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black"];
@@ -848,19 +860,44 @@
         }
         
         function stopRotateWheel() {
-          clearTimeout(spinTimeout);
-          var degrees = startAngle * 180 / Math.PI + 90;
-          var arcd = arc * 180 / Math.PI;
-          var index = Math.floor((360 - degrees % 360) / arcd);
-          ctx.save();
-          ctx.font = 'bold 60px Arial';
-          var text = '0.00'+number[index];
-        answer = text;
-          ctx.fillText(text, 250 - ctx.measureText(text).width / 2, 250 + 10);
-        checkwin();
-          ctx.restore();
+            clearTimeout(spinTimeout);
+            var degrees = startAngle * 180 / Math.PI + 90;
+            var arcd = arc * 180 / Math.PI;
+            var index = Math.floor((360 - degrees % 360) / arcd);
+            ctx.save();
+            ctx.font = 'bold 60px Arial';
+            var text = '0.00'+number[index];
+            answer = text;
+            postRouletteResult(text);
+            ctx.fillText(text, 250 - ctx.measureText(text).width / 2, 250 + 10);
+            // checkwin();
+            ctx.restore();
+            reset();
         }
-        
+
+        function postRouletteResult(rouletteResult) {
+            // var air_drop_result = localStorage.getItem("air_drop_result");
+            // var burn_result = localStorage.getItem("burn_result");
+            // var mint_result = localStorage.getItem("mint_result");
+            // var dominantAction = localStorage.getItem("dominant_action");
+
+            var send = { "airDrop" : air_drop_result, "burn" : burn_result, "mint" : mint_result,"dominant" : dominantAction, rouletteResult : rouletteResult};
+            var sendString = JSON.stringify(send);
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/rouletteAction', true);
+
+            //Send the proper header information along with the request
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    
+                }
+            }
+            xhr.send(sendString);
+        }
+
         function easeOut(t, b, c, d) {
           var ts = (t/=d)*t;
           var tc = ts*t;
@@ -998,6 +1035,21 @@
           }
           document.getElementById("money").innerHTML = "You Have " + total + "$";
         }
+    </script>
+
+    <script>
+
+      [1, 2, 3, 4, 5, 6].forEach((index) => {
+        const script = document.querySelector(`#codeScript${index}`);
+        const block = document.querySelector(`#codeBlock${index}`);
+
+      });
+      hljs.initHighlightingOnLoad();
+      
+    </script>
+    <!-- Roulette script  -->
+    <script type="application/javascript">
+        
       
     </script>
 </body>

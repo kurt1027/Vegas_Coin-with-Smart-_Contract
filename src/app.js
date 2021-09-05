@@ -1,11 +1,17 @@
 const express = require("express");
-// require('ejs')
+
 const app = express();
+
+app.use(express.urlencoded({extended:true}))
+// Process application/json
+app.use(express.json());
+
 
 
 app.listen(3000, () => {
   console.log("Application started and Listening on port 3000");
 });
+
 
 //Static Files
 app.use(express.static('src'))
@@ -25,6 +31,7 @@ app.set('view engine', 'ejs');
 var Promise = require("bluebird");
 var randomNumber = require("random-number-csprng");
 let trueRandom = 0;
+
 //blockchain
 require('dotenv').config()
 const Web3 = require('web3');
@@ -42,7 +49,7 @@ const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c911
 const ganacheSigner = jsonprovider.getSigner();
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0xfD789f1D7CaFecaFE6F31bCCadBe570D0791E565", abi, jsonprovider )
+let contract = new ethers.Contract("0x854B76AC535D3bA5642ee4C63488302e08996854", abi, jsonprovider )
 contract.balanceOf("0x79bc53CBcB9A525f34F4eB652DF8F92a34fC4184")
 .then(function(bal) {
  
@@ -69,6 +76,39 @@ Promise.try(function() {
     // console.log("Your random number:", number);
 }).catch({code: "RandomGenerationError"}, function(err) {
     console.log("Something went wrong!");
+});
+
+app.post('/slotMachinResult', function(req, res){  
+    //now req.body will be populated with the object you sent
+    console.log(req.body); //prints john
+    // if (req.dominant == 0) {
+    //     // contract.spinSlotMachine(number);
+    // } else if (req.dominant == 1) {
+    //     contract._burn(req.burn_result);
+    // } else {
+    //     contract._mint(req.mint_result);
+    // }
+    
+    // contract.then(function(results) {
+       
+    // })
+});
+
+app.post('/rouletteAction', function(req, res){  
+    //now req.body will be populated with the object you sent
+    console.log(req.body); //prints john
+    if (req.dominant == 0) {
+        contract.transfer('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b',req.rouletteResult);
+    } else if (req.dominant == 1) {
+        contract._burnFrom('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b',req.rouletteResult);
+    } else {
+        contract.addMinter('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b');
+        contract.mint('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b',req.rouletteResult);
+    }
+    
+    contract.then(function(results) {
+       console.log(results);
+    });
 });
 
 
