@@ -643,8 +643,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
     <script id="codeScript2">
-      
-     
+        var images = {
+            "airDrop" : "img/AirDrop.png",
+            "burn" : "img/Burn.png",
+            "mint" : "img/Mint.png"
+        }
         const btn = document.querySelector('#randomizeButton');
         const results = {
             machine1: document.querySelector('#machine1Result'),
@@ -676,10 +679,10 @@
         }
 
         function onComplete(active){
-            // results[this.element.id].innerText = `Index: ${this.active}`;
+
             var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
-            // if(!localStorage.getItem("slot"+i+"_storage_day_"+day+"_index_"+this.active)){
-                
+
+            console.log($('#machine3'),"test");
             localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult)
 
             air_drop_result = this.active == 0 ? +randomResult + +air_drop_result : +air_drop_result + +0;
@@ -701,7 +704,6 @@
                 } 
                 i=1;
             }
-            
         }
         function saveTotalResult() {
             localStorage.setItem("air_drop_result"+dateNow, air_drop_result);

@@ -49,34 +49,52 @@ const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c911
 const ganacheSigner = jsonprovider.getSigner();
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0x854B76AC535D3bA5642ee4C63488302e08996854", abi, jsonprovider )
+let contract = new ethers.Contract("0x68fAf5f1F3Dccc923a9a664659F21FA2eDCCCA61", abi, jsonprovider )
 contract.balanceOf("0x79bc53CBcB9A525f34F4eB652DF8F92a34fC4184")
 .then(function(bal) {
  
 });
+spinSlotMachine();
 
-Promise.try(function() {
-    return randomNumber(900, 1000);
-}).then(function(number) {
-    contract.spinSlotMachine(number)
-    .then(function(results) {
-        var randoms1 = results[0]+ ''.split();
-        var randoms2 = results[1]+ ''.split();
-        var randoms3 = results[2]+ ''.split();
-        console.log(`${results[0]}::${results[1]}::${results[2]}`);
-        // console.log(random1[0]);
+function spinSlotMachine () {
+    Promise.try(function() {
+        return randomNumber(900, 1000);
+    }).then(function(number) {
+        contract.spinSlotMachine(number)
+        .then(function(results) {
+            // var randoms1 = results[0]+ ''.split();
+            // var randoms2 = results[1]+ ''.split();
+            // var randoms3 = results[2]+ ''.split();
+            var slotActionType = [1,2,3];
+            var i = 0;
+    
+            // console.log(getRandomAction);
+            console.log(`${results[0]}::${results[1]}::${results[2]}`);
+            
+            let slots = [{},{},{}];
+    
+            slots.map(slot => {
+                var randomsvalue = results[i]+ ''.split();
+                slot.type = slotActionType[Math.floor(Math.random() * slotActionType.length)]; // burn mint airdop
+                slot.value = randomsvalue[0];
+                i++
+    
+            })
+    
+            console.log(slots);
+            // app.get("/", (req, res) => {
+            //     res.render('website',{ randoms1: randoms1, randoms2: randoms2, randoms3: randoms3 })
+            // //   res.sendFile(__dirname + '//index.html');
+            // //   res.send("Hello world!!!");
+            // });
+        })
+        // trueRandom = number;
+        // console.log("Your random number:", number);
+    }).catch({code: "RandomGenerationError"}, function(err) {
+        console.log("Something went wrong!");
+    });
+}
 
-        app.get("/", (req, res) => {
-            res.render('website',{ randoms1: randoms1, randoms2: randoms2, randoms3: randoms3 })
-        //   res.sendFile(__dirname + '//index.html');
-        //   res.send("Hello world!!!");
-        });
-    })
-    // trueRandom = number;
-    // console.log("Your random number:", number);
-}).catch({code: "RandomGenerationError"}, function(err) {
-    console.log("Something went wrong!");
-});
 
 app.post('/slotMachinResult', function(req, res){  
     //now req.body will be populated with the object you sent
