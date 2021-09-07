@@ -85,6 +85,11 @@ function spinSlotMachine () {
             var mint_result= 0;
             var actions = [];
             var dominantAction ;
+            const actionTypeEnum = {
+                AIR_DROP: 1,
+                BURN: 2,
+                MINT: 3
+            }
             console.log(`${results[0]}::${results[1]}::${results[2]}`);
             
             let slots = [{results:[{},{},{}]}];
@@ -95,12 +100,12 @@ function spinSlotMachine () {
                     
                     var randomsvalue = results[i]+ ''.split();
                     var slotResult = randomsvalue[Math.floor(Math.random() * randomsvalue.length)]
-                    var actionType = slotActionType[Math.floor(Math.random() * slotActionType.length)];
+                    var actionType = slotActionType[Math.floor(Math.random() * slotActionType.length)] ;
                     air_drop_result = actionType == 1 ? +air_drop_result + +slotResult : air_drop_result;
                     burn_result = actionType == 2 ? +burn_result + +slotResult : burn_result;
                     mint_result = actionType == 3 ? +mint_result + +slotResult : mint_result;
 
-                    result.type = actionType; // burn mint airdop
+                    result.type = actionType == actionTypeEnum.AIR_DROP ? 'Air Drop' : actionType == actionTypeEnum.BURN ? 'Burn' : 'Mint'; // burn mint airdop
                     result.value =slotResult;
                     i++
                 });
@@ -114,7 +119,7 @@ function spinSlotMachine () {
                 slot.airdrop = air_drop_result;
                 slot.burn = burn_result;
                 slot.mint = mint_result;
-                slot.dominant = dominantAction;
+                slot.dominant = dominantAction == actionTypeEnum.AIR_DROP ? 'Air Drop' : dominantAction == actionTypeEnum.BURN ? 'Burn' : 'Mint';
                 slot.value = dominantAction == 1 ? air_drop_result : dominantAction == 2 ? burn_result : mint_result;
                 slot.date = dateFormatted;
             });
