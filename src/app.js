@@ -48,12 +48,22 @@ const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:7545
 const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c91155b`;
 const ganacheSigner = jsonprovider.getSigner();
 
+////Create Signer.  This is to sign transaction using the user's private key
+const signer = new ethers.Wallet('9d43d1a4e69c07484c882f70ce2c73831b7f6d77a2db6f643e278426a9cc440c',provider)
+const account = signer.connect(provider)
+const transactionReq = TransactionRequest
+
+
+
 // create instance of TokenMin
-let contract = new ethers.Contract("0x68fAf5f1F3Dccc923a9a664659F21FA2eDCCCA61", abi, jsonprovider )
-contract.balanceOf("0x79bc53CBcB9A525f34F4eB652DF8F92a34fC4184")
+let contract = new ethers.Contract("0x14948E367faBC2d8aCf4A40063c942c86fA189C2", abi, jsonprovider )
+contract.balanceOf("0x12e9eED6F165c46B0a0955B531E4C28857497d80")
 .then(function(bal) {
- 
+    console.log(`BalanceOf ${bal}`)
 });
+
+// const mint = contract._mint('0x39D8414F338d78317AaB059975E8d7489ff370b9', 0.001);
+
 spinSlotMachine();
 
 function spinSlotMachine () {
@@ -65,28 +75,52 @@ function spinSlotMachine () {
             // var randoms1 = results[0]+ ''.split();
             // var randoms2 = results[1]+ ''.split();
             // var randoms3 = results[2]+ ''.split();
+            var dateNow = Date.now();
+            var today = new Date(dateNow);
+            var dateFormatted = today.toDateString();
             var slotActionType = [1,2,3];
             var i = 0;
-    
-            // console.log(getRandomAction);
+            var air_drop_result= 0;
+            var burn_result= 0;
+            var mint_result= 0;
+            var actions = [];
+            var dominantAction ;
             console.log(`${results[0]}::${results[1]}::${results[2]}`);
             
-            let slots = [{},{},{}];
-    
+            let slots = [{results:[{},{},{}]}];
+
             slots.map(slot => {
-                var randomsvalue = results[i]+ ''.split();
-                slot.type = slotActionType[Math.floor(Math.random() * slotActionType.length)]; // burn mint airdop
-                slot.value = randomsvalue[0];
-                i++
-    
-            })
-    
-            console.log(slots);
-            // app.get("/", (req, res) => {
-            //     res.render('website',{ randoms1: randoms1, randoms2: randoms2, randoms3: randoms3 })
-            // //   res.sendFile(__dirname + '//index.html');
-            // //   res.send("Hello world!!!");
-            // });
+               
+                slot.results.map(result=> {
+                    
+                    var randomsvalue = results[i]+ ''.split();
+                    var slotResult = randomsvalue[Math.floor(Math.random() * randomsvalue.length)]
+                    var actionType = slotActionType[Math.floor(Math.random() * slotActionType.length)];
+                    air_drop_result = actionType == 1 ? +air_drop_result + +slotResult : air_drop_result;
+                    burn_result = actionType == 2 ? +burn_result + +slotResult : burn_result;
+                    mint_result = actionType == 3 ? +mint_result + +slotResult : mint_result;
+
+                    result.type = actionType; // burn mint airdop
+                    result.value =slotResult;
+                    i++
+                });
+            });
+
+            actions.push(air_drop_result, burn_result, mint_result);
+            dominantAction = +findDominantAction(actions) + +1;
+            
+            slots.map(slot => {
+               
+                slot.airdrop = air_drop_result;
+                slot.burn = burn_result;
+                slot.mint = mint_result;
+                slot.dominant = dominantAction;
+                slot.value = dominantAction == 1 ? air_drop_result : dominantAction == 2 ? burn_result : mint_result;
+                slot.date = dateFormatted;
+            });
+            console.log(slots[0]);
+            
+        
         })
         // trueRandom = number;
         // console.log("Your random number:", number);
@@ -94,22 +128,27 @@ function spinSlotMachine () {
         console.log("Something went wrong!");
     });
 }
+function findDominantAction(numericValues) {
 
+    // console.log(numericValues);
 
-app.post('/slotMachinResult', function(req, res){  
-    //now req.body will be populated with the object you sent
-    console.log(req.body); //prints john
-    // if (req.dominant == 0) {
-    //     // contract.spinSlotMachine(number);
-    // } else if (req.dominant == 1) {
-    //     contract._burn(req.burn_result);
-    // } else {
-    //     contract._mint(req.mint_result);
-    // }
-    
-    // contract.then(function(results) {
-       
-    // })
+    var max = -Infinity; // calling Math.max with no arguments returns -Infinity
+    var maxName = null;
+    for (var key in numericValues) {
+        var num = numericValues[key];
+
+        if (num > max) {
+            max = num;
+            maxName = key;
+        }
+
+        max = (num > max && num) || max;
+    }
+
+    return maxName;
+}
+app.get('/slotMachinResult', function(req, res){  
+    return spinSlotMachine();
 });
 
 app.post('/rouletteAction', function(req, res){  

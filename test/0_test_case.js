@@ -6,7 +6,7 @@ contract('vegascoin', function(accounts) {
     const name = "VegasCoins.io"
     const symbol = 'VCoins'
     const decimals = 18
-    const initialSupply = 1000000000
+    const initialSupply = 2000000000
     const feeReceiver = '0x5807c6ecb0AB413816f7C90f0e5C2974bDF89fc3'
     const tokenOwnerAddress = '0xD084e8bBCE0853f0ef57FAC2Ea7964F7a57E788b'
 
