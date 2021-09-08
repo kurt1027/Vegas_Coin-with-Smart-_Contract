@@ -56,8 +56,8 @@ const transactionReq = TransactionRequest
 
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0x14948E367faBC2d8aCf4A40063c942c86fA189C2", abi, jsonprovider )
-contract.balanceOf("0x12e9eED6F165c46B0a0955B531E4C28857497d80")
+let contract = new ethers.Contract("0x0D0AA4978a13b8484f8b4dc09BCbc73e6a4861ac", abi, jsonprovider )
+contract.balanceOf("0x4fc50af2F59523C6c7746B8C1135901d67B91258")
 .then(function(bal) {
     console.log(`BalanceOf ${bal}`)
 });
