@@ -56,13 +56,20 @@ const transactionReq = TransactionRequest
 
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0x0D0AA4978a13b8484f8b4dc09BCbc73e6a4861ac", abi, jsonprovider )
-contract.balanceOf("0x4fc50af2F59523C6c7746B8C1135901d67B91258")
+let contract = new ethers.Contract("0xE6c193E78444309ECcF655C641FCd10be3e31E83", abi, jsonprovider )
+contract.balanceOf("0x91E29C4eA534B122c32D605ed9304adDA64B021C")
 .then(function(bal) {
     console.log(`BalanceOf ${bal}`)
 });
 
 // const mint = contract._mint('0x39D8414F338d78317AaB059975E8d7489ff370b9', 0.001);
+
+
+
+app.get("/", (req, res) => {
+    res.render('website')
+});
+
 
 spinSlotMachine();
 
@@ -70,11 +77,8 @@ function spinSlotMachine () {
     Promise.try(function() {
         return randomNumber(900, 1000);
     }).then(function(number) {
-        contract.spinSlotMachine(number)
-        .then(function(results) {
-            // var randoms1 = results[0]+ ''.split();
-            // var randoms2 = results[1]+ ''.split();
-            // var randoms3 = results[2]+ ''.split();
+            contract.spinSlotMachine(number)
+        .then(function(results,resolve) {
             var dateNow = Date.now();
             var today = new Date(dateNow);
             var dateFormatted = today.toDateString();
@@ -86,11 +90,10 @@ function spinSlotMachine () {
             var actions = [];
             var dominantAction ;
             const actionTypeEnum = {
-                AIR_DROP: 1,
-                BURN: 2,
-                MINT: 3
+                1: "Air Drop",
+                2: "Burn",
+                3: "Mint"
             }
-            console.log(`${results[0]}::${results[1]}::${results[2]}`);
             
             let slots = [{results:[{},{},{}]}];
 
@@ -105,7 +108,7 @@ function spinSlotMachine () {
                     burn_result = actionType == 2 ? +burn_result + +slotResult : burn_result;
                     mint_result = actionType == 3 ? +mint_result + +slotResult : mint_result;
 
-                    result.type = actionType == actionTypeEnum.AIR_DROP ? 'Air Drop' : actionType == actionTypeEnum.BURN ? 'Burn' : 'Mint'; // burn mint airdop
+                    result.type = actionTypeEnum[actionType]; // burn mint airdop
                     result.value =slotResult;
                     i++
                 });
@@ -123,16 +126,20 @@ function spinSlotMachine () {
                 slot.value = dominantAction == 1 ? air_drop_result : dominantAction == 2 ? burn_result : mint_result;
                 slot.date = dateFormatted;
             });
-            console.log(slots[0]);
+
+            return slots[0]
+            // resolve(slots[0]);
+            // resolve(path.normalize(slots[0]));
+            // console.log(slots[0]);
             
         
         })
-        // trueRandom = number;
-        // console.log("Your random number:", number);
+     
     }).catch({code: "RandomGenerationError"}, function(err) {
         console.log("Something went wrong!");
     });
 }
+// console.log(spinSlotMachine);
 function findDominantAction(numericValues) {
 
     // console.log(numericValues);
@@ -152,8 +159,8 @@ function findDominantAction(numericValues) {
 
     return maxName;
 }
-app.get('/slotMachinResult', function(req, res){  
-    return spinSlotMachine();
+app.get('/slotMachinResult', async(req, res) => {  
+    return await spinSlotMachine();
 });
 
 app.post('/rouletteAction', function(req, res){  

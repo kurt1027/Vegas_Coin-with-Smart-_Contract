@@ -671,39 +671,45 @@
         var dominantAction;
 
         function slotMachineRandomize() {
-            day++;
-
-            machine1.shuffle(5, onComplete);
-            setTimeout(() => machine2.shuffle(5, onComplete), 500);
-            setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+            getSlotMachineResult();
+            // day++;
+            // let results = [
+            //     {
+            //         type: 'mint',
+            //         value: 10
+            //     },
+            //     {
+            //         type: 'burn',
+            //         value: 10
+            //     },
+            //     {
+            //         type: 'mint',
+            //         value: 2
+            //     }
+            // ]
+            // machine1.shuffle(5, onComplete(machine1,results[0].type));
+            // setTimeout(() => machine2.shuffle(5, onComplete(machine2,results[1].type)), 500);
+            // setTimeout(() => machine3.shuffle(5, onComplete(machine3,results[2].type)), 1000);
         }
 
-        function onComplete(active){
+        function onComplete(active,type){
 
-            var randomResult = document.getElementById("random"+i+"Result"+this.active).value;
-
-            console.log($('#machine3'),"test");
-            localStorage.setItem("slot"+i+"_storage_day_"+day+"_index_"+this.active, randomResult)
-
-            air_drop_result = this.active == 0 ? +randomResult + +air_drop_result : +air_drop_result + +0;
-            burn_result = this.active == 1 ? +randomResult + +burn_result : +burn_result + +0;
-            mint_result = this.active == 2 ? +randomResult + +mint_result : +mint_result + +0;
-
-            localStorage.setItem("air_drop_result", air_drop_result)
-            localStorage.setItem("burn_result", burn_result)
-            localStorage.setItem("mint_result", mint_result)
-            
-            if(i < 3) {
-                i++;
-            } else {
-                console.log("Day: "+day);
-                if (day == 7) {
-                    saveTotalResult();
-                    displaySaveDominantAction();
-                    document.getElementById("rouletteBtn").disabled = false;
-                } 
-                i=1;
+            let images = {
+                'airdrop':"img/Airdrop.png",
+                'burn':"img/Burn.png",
+                'mint':"img/Mint.png",
             }
+
+            $(active.tiles[0])[0].src = images[type]
+        }
+        function getSlotMachineResult() {
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                console.log(xhr.responseText);
+            };
+            xhr.open('GET', '/slotMachinResult');
+            xhr.send();
         }
         function saveTotalResult() {
             localStorage.setItem("air_drop_result"+dateNow, air_drop_result);

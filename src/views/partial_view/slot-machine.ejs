@@ -1,122 +1,54 @@
-    <div class="container">
-      <div class="card" style="border-color: rgb(251 189 24 / 40%);background-color: black;">
-        <div class="card-body">
-          <div id="randomize">
-            <div class="container">
-              <h1 style="color:white">Vegas Coin Slot Machine</h1>
-         
+<div class="container">
+  <div class="card" style="border-color: rgb(251 189 24 / 40%);background-color: black;">
+    <div class="card-body">
+      <div id="randomize">
+        <div class="container">
+          <h1 style="color:white">Vegas Coin Slot Machine</h1>
 
-              <div class="row">
-                <div class="col-sm-4">
-                  <div>
-                    <div id="machine1" class="randomizeMachine">    
-                        <% for(var i=0; i < randoms1.length; i++) { %>
 
-                          <% if(i === 0) { %>
-                            <div style="margin-top:5px">
-                              <img src="img/AirDrop.png" width="100%"/>     
-                            </div>
-  
-                          <% } else if(i===1) { %>
-                            <div style="margin-top:5px">
-                              <img src="img/Burn.png" width="100%"/>
-                              <!-- <h1><%= randoms2[i] %></h1> -->
-                            </div>
-                          <% } else { %>
-                            <div style="margin-top:5px">
-                              <img src="img/Mint.png" width="100%"/>
-                              <!-- <h1><%= randoms3[i] %></h1> -->
-                            </div>
-                          <% } %>
-                         
-
-                        <% } %>
-                    </div>
-                  </div>
-                  <% for(var i=0; i < randoms1.length; i++) { %>
-                      <input type="hidden" id="random1Result<%=i%>" value="<%= randoms1[i] %>">
-                  <% } %>
+          <div class="row">
+            <div class="col-sm-4">
+              <div>
+                <div id="machine1" class="randomizeMachine">
+                  <img src="img/AirDrop.png" width="100%" />
                 </div>
-      
-                <div class="col-sm-4">
-                  <div>
-                    <div id="machine2" class="randomizeMachine">
-                      <% for(var i=0; i < randoms2.length; i++) { %>
-
-                        <% if (i === 0) { %>
-                            <div style="margin-top:5px">
-                              <img src="img/AirDrop.png" width="100%"/>     
-                            </div>
-  
-                          <% } else if (i===1) { %>
-                            <div style="margin-top:5px">
-                              <img src="img/Burn.png" width="100%"/>
-                              <!-- <h1><%= randoms2[i] %></h1> -->
-                            </div>
-                          <% } else { %>
-                            <div style="margin-top:5px">
-                              <img src="img/Mint.png" width="100%"/>
-                              <!-- <h1><%= randoms3[i] %></h1> -->
-                            </div>
-                          <% } %>
-
-                      <% } %>
-     
-                    </div>
-                  </div>
-                  <% for (var i=0; i < randoms2.length; i++) { %>
-                      <input type="hidden" id="random2Result<%=i%>" value="<%= randoms2[i] %>">
-                  <% } %>
-                </div>
-      
-                <div class="col-sm-4">
-                  <div>
-                    <div id="machine3" class="randomizeMachine">
-                      <% for(var i=0; i < randoms3.length; i++) { %>
-
-                        <% if(i === 0) { %>
-                          <div style="margin-top:5px">
-                            <img src="img/AirDrop.png" width="100%"/>     
-                          </div>
-
-                        <% } else if(i===1) { %>
-                          <div style="margin-top:5px">
-                            <img src="img/Burn.png" width="100%"/>
-                            <!-- <h1><%= randoms2[i] %></h1> -->
-                          </div>
-                        <% } else { %>
-                          <div style="margin-top:5px">
-                            <img src="img/Mint.png" width="100%"/>
-                          </div>
-                        <% } %>
-
-                      <% } %>
- 
-                    </div>
-                  </div>
-                  <% for(var i=0; i < randoms3.length; i++) { %>
-                      <input type="hidden" id="random3Result<%=i%>" value="<%= randoms3[i] %>">
-                  <% } %>
-                </div>
-              
-                <div class="btn-group btn-group-justified" role="group">
-                  <button id="randomizeButton" type="button" onclick="slotMachineRandomize()" class="btn btn4 btn-lg" style="color:white">Shuffle</button>&nbsp;&nbsp;<button id="reset" type="button" class="btn btn-danger btn-lg">Reset</button>
-                </div>
-                <br>
-                
               </div>
-              <center>
-                <div id="actionResult"></div> 
-              </center>
-              <!-- <div class="row">
+            </div>
+
+            <div class="col-sm-4">
+              <div>
+                <div id="machine2" class="randomizeMachine">
+                  <img src="img/Burn.png" width="100%" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div>
+                <div id="machine3" class="randomizeMachine">
+                  <img src="img/Mint.png" width="100%" />
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group btn-group-justified" role="group">
+              <button id="randomizeButton" type="button" onclick="slotMachineRandomize()" class="btn btn4 btn-lg"
+                style="color:white">Shuffle</button>&nbsp;&nbsp;<button id="reset" type="button"
+                class="btn btn-danger btn-lg">Reset</button>
+            </div>
+            <br>
+
+          </div>
+          <center>
+            <div id="actionResult"></div>
+          </center>
+          <!-- <div class="row">
                 <div class="col-sm-10 offset-sm-1">
                   <pre><code id="codeBlock2"></code></pre>
                 </div>
               </div> -->
-            </div>
-          </div>
         </div>
       </div>
     </div>
-
-
+  </div>
+</div>
