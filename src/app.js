@@ -123,6 +123,7 @@ function spinSlotMachine () {
             slot.dominant = dominantAction == actionTypeEnum.AIR_DROP ? 'Air Drop' : dominantAction == actionTypeEnum.BURN ? 'Burn' : 'Mint';
             slot.value = dominantAction == 1 ? air_drop_result : dominantAction == 2 ? burn_result : mint_result;
             slot.date = dateFormatted;
+            addOrUpdateresult(slot)
             return new Promise(resolve => {resolve(slot)});
         })
         return contractSpin

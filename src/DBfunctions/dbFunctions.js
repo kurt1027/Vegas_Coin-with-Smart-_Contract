@@ -26,7 +26,7 @@ export const getResults = async () => {
 
 // getResults();
 
-export const getresultById = async (id) => {
+export const getresultById = async (date) => {
     const params = {
         TableName: TABLE_NAME,
         Key: {
