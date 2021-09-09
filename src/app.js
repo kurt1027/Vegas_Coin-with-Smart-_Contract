@@ -38,6 +38,9 @@ const Web3 = require('web3');
 const { ethers, utils, TransactionRequest } = require('ethers');
 const abi = require('./TokenMintERC20MintableToken.json')
 
+//db functions
+import { getresultById,addOrUpdateresult } from './DBfunctions/dbFunctions'; 
+
 const web3 = new Web3(process.env.INFURA_KOVAN)
 const provider = ethers.getDefaultProvider('kovan', {
     infura: process.env.INFURA_KOVAN
