@@ -670,8 +670,9 @@
         var actions = [];
         var dominantAction;
 
-        function slotMachineRandomize() {
-            getSlotMachineResult();
+        async function slotMachineRandomize() {
+            let results = await getSlotMachineResult();
+            console.log(results['results'][1]['type']);
             // day++;
             // let results = [
             //     {
@@ -687,30 +688,28 @@
             //         value: 2
             //     }
             // ]
-            // machine1.shuffle(5, onComplete(machine1,results[0].type));
-            // setTimeout(() => machine2.shuffle(5, onComplete(machine2,results[1].type)), 500);
-            // setTimeout(() => machine3.shuffle(5, onComplete(machine3,results[2].type)), 1000);
+            machine1.shuffle(5, onComplete(machine1,results['results'][0]['type']));
+            setTimeout(() => machine2.shuffle(5, onComplete(machine2,results['results'][1]['type'])), 500);
+            setTimeout(() => machine3.shuffle(5, onComplete(machine3,results['results'][2]['type'])), 1000);
         }
 
         function onComplete(active,type){
 
             let images = {
-                'airdrop':"img/Airdrop.png",
-                'burn':"img/Burn.png",
-                'mint':"img/Mint.png",
+                'AIR_DROP':"img/Airdrop.png",
+                'BURN':"img/Burn.png",
+                'MINT':"img/Mint.png",
             }
 
             $(active.tiles[0])[0].src = images[type]
         }
-        function getSlotMachineResult() {
+        async function getSlotMachineResult() {
 
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                console.log(xhr.responseText);
-            };
-            xhr.open('GET', '/slotMachinResult');
-            xhr.send();
+            const response = await fetch('/slotMachinResult')
+            const results = await response.json();
+            return results;
         }
+        
         function saveTotalResult() {
             localStorage.setItem("air_drop_result"+dateNow, air_drop_result);
             localStorage.setItem("burn_total"+dateNow, burn_result);
