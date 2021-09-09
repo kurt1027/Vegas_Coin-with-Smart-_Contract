@@ -26,38 +26,42 @@ export const getResults = async () => {
 
 // getResults();
 
-export const getresultById = async (date) => {
+export const getresultByDate = async (date) => {
     const params = {
         TableName: TABLE_NAME,
-        Key: {
-            id,
-        },
+        IndexName: 'date-index',
+        KeyConditionExpression: '#date = :date',
+        ExpressionAttributeNames: { '#date' : 'date'},
+        ExpressionAttributeValues: {
+            ":date": date
+        }
     };
-    const results = await dynamoClient.get(params).promise();
+    console.log(params)
+    const results = await dynamoClient.query(params).promise();
     return results;
 };
 
-let item = {
-    results: [
-        {
-            type: 'mint',
-            value: 10
-        },
-        {
-            type: 'burn',
-            value: 10
-        },
-        {
-            type: 'mint',
-            value: 2
-        }
-    ],
-    dominant: 'mint',
-    value: 12,
-    counter: 1,
-    date:  `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`,
-    id: short.generate()
-}
+// let item = {
+//     results: [
+//         {
+//             type: 'mint',
+//             value: 10
+//         },
+//         {
+//             type: 'burn',
+//             value: 10
+//         },
+//         {
+//             type: 'mint',
+//             value: 2
+//         }
+//     ],
+//     dominant: 'mint',
+//     value: 12,
+//     counter: 1,
+//     date:  `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`,
+//     id: short.generate()
+// }
 
 export const addOrUpdateresult = async (result) => {
     const params = {
