@@ -673,21 +673,7 @@
         async function slotMachineRandomize() {
             let results = await getSlotMachineResult();
             console.log(results['results'][1]['type']);
-            // day++;
-            // let results = [
-            //     {
-            //         type: 'mint',
-            //         value: 10
-            //     },
-            //     {
-            //         type: 'burn',
-            //         value: 10
-            //     },
-            //     {
-            //         type: 'mint',
-            //         value: 2
-            //     }
-            // ]
+       
             machine1.shuffle(5, onComplete(machine1,results['results'][0]['type']));
             setTimeout(() => machine2.shuffle(5, onComplete(machine2,results['results'][1]['type'])), 500);
             setTimeout(() => machine3.shuffle(5, onComplete(machine3,results['results'][2]['type'])), 1000);
