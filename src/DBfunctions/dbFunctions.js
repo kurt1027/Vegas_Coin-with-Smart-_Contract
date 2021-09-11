@@ -15,7 +15,7 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const TABLE_NAME = "results"
 
-export const getResults = async () => {
+async function getResults  () {
     const params = {
         TableName: TABLE_NAME,
     };
@@ -26,7 +26,7 @@ export const getResults = async () => {
 
 // getResults();
 
-export const getresultByDate = async (date) => {
+async function getresultByDate (date) {
     const params = {
         TableName: TABLE_NAME,
         IndexName: 'date-index',
@@ -41,29 +41,8 @@ export const getresultByDate = async (date) => {
     return results;
 };
 
-// let item = {
-//     results: [
-//         {
-//             type: 'mint',
-//             value: 10
-//         },
-//         {
-//             type: 'burn',
-//             value: 10
-//         },
-//         {
-//             type: 'mint',
-//             value: 2
-//         }
-//     ],
-//     dominant: 'mint',
-//     value: 12,
-//     counter: 1,
-//     date:  `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`,
-//     id: short.generate()
-// }
 
-export const addOrUpdateresult = async (result) => {
+async function  addOrUpdateresult (result) {
     const params = {
         TableName: TABLE_NAME,
         Item: result,

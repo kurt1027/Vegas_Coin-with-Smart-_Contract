@@ -672,11 +672,22 @@
 
         async function slotMachineRandomize() {
             let results = await getSlotMachineResult();
-            console.log(results['results'][1]['type']);
-       
+            // console.log(results);
+            if (results['count'] == 7) {
+                
+                document.getElementById("randomizeButton").disabled = true;
+                document.getElementById("rouletteBtn").disabled = false;
+            }
+
             machine1.shuffle(5, onComplete(machine1,results['results'][0]['type']));
             setTimeout(() => machine2.shuffle(5, onComplete(machine2,results['results'][1]['type'])), 500);
             setTimeout(() => machine3.shuffle(5, onComplete(machine3,results['results'][2]['type'])), 1000);
+        }
+
+        async function testFetch() {
+            let overAllResults = await getOverAllResult();
+
+            console.log(overAllResults);
         }
 
         function onComplete(active,type){
@@ -693,6 +704,14 @@
 
             const response = await fetch('/slotMachinResult')
             const results = await response.json();
+            return results;
+        }
+
+        async function getOverAllResult() {
+
+            const response = await fetch('/getOverAllResult')
+            const results = await response.json();
+            // console.log(results);
             return results;
         }
         
