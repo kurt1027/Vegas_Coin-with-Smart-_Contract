@@ -672,11 +672,13 @@
 
         async function slotMachineRandomize() {
             let results = await getSlotMachineResult();
-            // console.log(results);
+            console.log(results);
             if (results['count'] == 7) {
-                
+                var dominantAction = results['overAll']['dominantAction'] == 1 ? 'Air Drop' : results['overAll']['dominantAction'] == 2 ? 'Burn' : 'Mint';
                 document.getElementById("randomizeButton").disabled = true;
                 document.getElementById("rouletteBtn").disabled = false;
+                document.getElementById("actionResult").innerHTML = '<h3>'+dominantAction +'</h3>';
+                document.getElementById("actionResultRoullete").innerHTML = '<h3>'+dominantAction+'</h3>';
             }
 
             machine1.shuffle(5, onComplete(machine1,results['results'][0]['type']));
@@ -707,13 +709,6 @@
             return results;
         }
 
-        async function getOverAllResult() {
-
-            const response = await fetch('/getOverAllResult')
-            const results = await response.json();
-            // console.log(results);
-            return results;
-        }
         
         function saveTotalResult() {
             localStorage.setItem("air_drop_result"+dateNow, air_drop_result);
@@ -888,12 +883,13 @@
         }
 
         function postRouletteResult(rouletteResult) {
+            // alert(rouletteResult);
             // var air_drop_result = localStorage.getItem("air_drop_result");
             // var burn_result = localStorage.getItem("burn_result");
             // var mint_result = localStorage.getItem("mint_result");
             // var dominantAction = localStorage.getItem("dominant_action");
 
-            var send = { "airDrop" : air_drop_result, "burn" : burn_result, "mint" : mint_result,"dominant" : dominantAction, rouletteResult : rouletteResult};
+            var send = { rouletteResult };
             var sendString = JSON.stringify(send);
             
             var xhr = new XMLHttpRequest();
@@ -902,11 +898,7 @@
             //Send the proper header information along with the request
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            xhr.onreadystatechange = function() { // Call a function when the state changes.
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    
-                }
-            }
+        
             xhr.send(sendString);
         }
 
