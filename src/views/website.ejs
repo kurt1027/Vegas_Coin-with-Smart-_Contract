@@ -673,6 +673,12 @@
         async function slotMachineRandomize() {
             let results = await getSlotMachineResult();
             console.log(results);
+           
+
+            machine1.shuffle(5, onComplete(machine1,results['results'][0]['type']));
+            setTimeout(() => machine2.shuffle(5, onComplete(machine2,results['results'][1]['type'])), 500);
+            setTimeout(() => machine3.shuffle(5, onComplete(machine3,results['results'][2]['type'])), 1000);
+
             if (results['count'] == 7) {
                 var dominantAction = results['overAll']['dominantAction'] == 1 ? 'Air Drop' : results['overAll']['dominantAction'] == 2 ? 'Burn' : 'Mint';
                 document.getElementById("randomizeButton").disabled = true;
@@ -680,16 +686,6 @@
                 document.getElementById("actionResult").innerHTML = '<h3>'+dominantAction +'</h3>';
                 document.getElementById("actionResultRoullete").innerHTML = '<h3>'+dominantAction+'</h3>';
             }
-
-            machine1.shuffle(5, onComplete(machine1,results['results'][0]['type']));
-            setTimeout(() => machine2.shuffle(5, onComplete(machine2,results['results'][1]['type'])), 500);
-            setTimeout(() => machine3.shuffle(5, onComplete(machine3,results['results'][2]['type'])), 1000);
-        }
-
-        async function testFetch() {
-            let overAllResults = await getOverAllResult();
-
-            console.log(overAllResults);
         }
 
         function onComplete(active,type){
@@ -722,21 +718,7 @@
             document.getElementById("actionResult").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
             document.getElementById("actionResultRoullete").innerHTML = dominantAction == 0 ? '<h3>Dominant Action:  </h3><h2>Air Drop</h2>' : dominantAction == 1 ? '<h3>Dominant Action:  </h3><h2>Burn</h2>' : dominantAction == 2 ? '<h3>Dominant Action:  </h3><h2>Mint</h2>' : '';
             document.getElementById("randomizeButton").disabled = true;
-            // var send = { "airDrop" : air_drop_result, "burn" : burn_result, "mint" : mint_result,dominant : dominantAction};
-            // var sendString = JSON.stringify(send);
 
-            // var xhr = new XMLHttpRequest();
-            // xhr.open("POST", '/slotMachinResult', true);
-
-            // //Send the proper header information along with the request
-            // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-            // xhr.onreadystatechange = function() { // Call a function when the state changes.
-            //     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    
-            //     }
-            // }
-            // xhr.send(sendString);
         }
         function whichIsTheGreatest(numericValues) {
 
@@ -757,14 +739,9 @@
 
             return maxName;
         }
-        function reset() {
+        async function reset() {
+            const response = await fetch('/resetData')
 
-            day = 0;
-            air_drop_result = 0;
-            burn_result = 0;
-            mint_result = 0;
-            actions =[];
-            localStorage.clear();
             document.getElementById("randomizeButton").disabled = false;
             document.getElementById("rouletteBtn").disabled = true;
             document.getElementById("actionResult").innerHTML = '';
@@ -883,11 +860,6 @@
         }
 
         function postRouletteResult(rouletteResult) {
-            // alert(rouletteResult);
-            // var air_drop_result = localStorage.getItem("air_drop_result");
-            // var burn_result = localStorage.getItem("burn_result");
-            // var mint_result = localStorage.getItem("mint_result");
-            // var dominantAction = localStorage.getItem("dominant_action");
 
             var send = { rouletteResult };
             var sendString = JSON.stringify(send);

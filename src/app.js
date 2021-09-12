@@ -52,11 +52,6 @@ const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:7545
 const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c91155b`;
 const ganacheSigner = jsonprovider.getSigner();
 
-////Create Signer.  This is to sign transaction using the user's private key
-const signer = new ethers.Wallet('9d43d1a4e69c07484c882f70ce2c73831b7f6d77a2db6f643e278426a9cc440c', provider)
-const account = signer.connect(provider)
-const transactionReq = TransactionRequest
-
 //DBFunctions
 AWS.config.update({
     region: process.env.AWS_DEFAULT_REGION,
@@ -125,14 +120,59 @@ async function getOverAllResultByDate(date) {
     return results;
 };
 
+async function deleteResultByDate(date) {
+    const params = {
+        TableName: TABLE_NAME,
+        Key: {
+            date,
+        }
+    };
+    return await dynamoClient.delete(params).promise();
+};
+async function deleteOverAllResultByDate(date) {
+    const params = {
+        TableName: TABLE_NAME_OVER_ALL_RESULT,
+        Key: {
+            date,
+        }
+    };
+    return await dynamoClient.delete(params).promise();
+};
+//end of db functions
+
+//slotActions
+async function burn(amount) {
+    const contract = new window.web3.eth.Contract(ABI, ContractAddress);
+    
+    contract.methods.burn(amount)
+        .send({
+            from: account,
+            gasLimit: 100000,
+            type: '0x2'
+        })
+}
+
+async function mint(amount) {
+    const contract = new window.web3.eth.Contract(ABI, ContractAddress);
+    const address = document.getElementById("mintTokenAddressInput").value;
+    
+    contract.methods.mint(address, amount)
+        .send({
+            from: account,
+            gasLimit: 100000,
+            type: '0x2'
+        })
+}
+//end of slot actions
+
+
 // create instance of TokenMin
-let contract = new ethers.Contract("0x0dE4E6a9D65f447Ab66A4A94Fd9059Fc87219038", abi, jsonprovider)
-contract.balanceOf("0x1FF401dfeD6B9764614A66e04e8425a3Ce011132")
+let contract = new ethers.Contract("0xfA1212ED02BC2A80Ee75308F1B9E4C5331A603c6", abi, jsonprovider)
+contract.balanceOf("0x87866776335420031F166bB2f670BFa1B29ecC17")
     .then(function (bal) {
         console.log(`BalanceOf ${bal}`)
     });
 
-// const mint = contract._mint('0x39D8414F338d78317AaB059975E8d7489ff370b9', 0.001);
 
 
 
@@ -140,12 +180,6 @@ app.get("/", (req, res) => {
     res.render('website')
 });
 
-
-// async function slotMachineResult(){
-//    let slotResult = await spinSlotMachine();
-//    return slotResult;
-// }
-// spinSlotMachine();
 function spinSlotMachine() {
     let slotResult = Promise.try(function () {
         return randomNumber(900, 1000);
@@ -288,20 +322,13 @@ function findDominantAction(numericValues) {
 
     return maxName;
 }
-app.get('/getOverAllResult', async (req, res) => {
-    // console.log('get overall result');
-    // let getOverAllResultByDate = await getOverAllResultByDate();
-    // console.log(getOverAllResultByDate);
+app.get('/resetData', async (req, res) => {
     var dateNow = Date.now();
     var today = new Date(dateNow);
     var dateFormatted = today.toDateString();
 
-    let getOverAllResult = await getOverAllResultByDate(dateFormatted).then(function (result) {
-        res.json(result);
-
-        console.log(result)
-    })
-    return getOverAllResult;
+    await deleteResultByDate(dateFormatted)
+    await deleteOverAllResultByDate(dateFormatted)
 })
 app.post('/rouletteAction', function (req, res) {
     //now req.body will be populated with the object you sent
