@@ -48,7 +48,7 @@ const provider = ethers.getDefaultProvider('kovan', {
 })
 
 //Local host Ganache
-const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:7545`);
+const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:8545`);
 const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c91155b`;
 const ganacheSigner = jsonprovider.getSigner();
 
