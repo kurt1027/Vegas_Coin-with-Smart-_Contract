@@ -126,8 +126,8 @@ async function getOverAllResultByDate(date) {
 };
 
 // create instance of TokenMin
-let contract = new ethers.Contract("0x0dE4E6a9D65f447Ab66A4A94Fd9059Fc87219038", abi, jsonprovider)
-contract.balanceOf("0x1FF401dfeD6B9764614A66e04e8425a3Ce011132")
+let contract = new ethers.Contract("0x6AA0f2b282A829cFeCa3f54C14f92550FFe3ddEE", abi, jsonprovider)
+contract.balanceOf("0x2d6d874D0f3c86aa82bfec38cFe76c393C7c4Ac0")
     .then(function (bal) {
         console.log(`BalanceOf ${bal}`)
     });
