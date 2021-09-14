@@ -1,17 +1,36 @@
 const express = require("express");
-
 const app = express();
+var fs = require('fs');
+const contractJson = fs.readFileSync('build/contracts/abi.json');
+const AWS = require('aws-sdk');
+const short = require('short-uuid');
+const Web3WsProvider = require('web3-providers-ws');
+const HDWalletProvider = require("truffle-hdwallet-provider");
+//blockchain
+require('dotenv').config()
+const Web3 = require('web3');
+const { ethers, utils, TransactionRequest } = require('ethers');
+
+// const contractJson = fs.readFileSync('./tokenMintERC20MintableToken.json');
+const Promise = require("bluebird");
+const randomNumber = require("random-number-csprng");
+
+//initial web3
+const abi = JSON.parse(contractJson);
+const connectionProvider = new Web3WsProvider(`wss://kovan.infura.io/ws/v3/${process.env.infuraProjectID}`);
+const zeroExPrivateKeys = [process.env.walletPrivateKey];
+const walletProvider = new HDWalletProvider(zeroExPrivateKeys, connectionProvider);
+const web3 = new Web3(walletProvider);
+
+
+// create instance of TokenMin
+const contract = new web3.eth.Contract(abi, process.env.contractAddress);
 
 app.use(express.urlencoded({ extended: true }))
-// Process application/json
 app.use(express.json());
-
 app.listen(3000, () => {
     console.log("Application started and Listening on port 3000");
 });
-
-const AWS = require('aws-sdk');
-const short = require('short-uuid');
 
 //Static Files
 app.use(express.static('src'))
@@ -28,40 +47,16 @@ app.set('views', './src/views/partial_view');
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
-var Promise = require("bluebird");
-var randomNumber = require("random-number-csprng");
-let trueRandom = 0;
-
-//blockchain
-require('dotenv').config()
-const Web3 = require('web3');
-const { ethers, utils, TransactionRequest } = require('ethers');
-const abi = require('./TokenMintERC20MintableToken.json');
-const { json } = require("express");
-
-//db functions
-// import { getResults,addOrUpdateresult } from './DBfunctions/dbFunctions'; 
-
-const web3 = new Web3(process.env.INFURA_KOVAN)
-const provider = ethers.getDefaultProvider('kovan', {
-    infura: process.env.INFURA_KOVAN
-})
-
-//Local host Ganache
-const jsonprovider = new ethers.providers.JsonRpcProvider(`http://127.0.0.1:7545`);
-const ganachePK = `e4a7aa9fca5bf0012fcc7add7857521e5e46239d5904e6b62d8c8ed53c91155b`;
-const ganacheSigner = jsonprovider.getSigner();
-
 //DBFunctions
 AWS.config.update({
     region: process.env.AWS_DEFAULT_REGION,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 })
-
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const TABLE_NAME = "results"
 const TABLE_NAME_OVER_ALL_RESULT = "overAllResults"
+let trueRandom = 0;
 
 async function getResults() {
     const params = {
@@ -142,39 +137,74 @@ async function deleteOverAllResultByDate(date) {
 
 //slotActions
 async function burn(amount) {
-    const contract = new window.web3.eth.Contract(ABI, ContractAddress);
-    
+    const [account] = await web3.eth.getAccounts();
+
     contract.methods.burn(amount)
         .send({
             from: account,
             gasLimit: 100000,
             type: '0x2'
         })
+        .then(result => res.send(result))
+        .catch(error => res.status(404).send(error))
+     
 }
 
-async function mint(amount) {
-    const contract = new window.web3.eth.Contract(ABI, ContractAddress);
-    const address = document.getElementById("mintTokenAddressInput").value;
+async function mint(amount,res) {
+    const toAddress = process.env.contractAddress;
+    const [account] = await web3.eth.getAccounts();
+    // var amount = 2000000;
+    let mintResult = contract.methods.mint(toAddress, amount)
+    .send({
+        from: account,
+        gasLimit: 100000,
+        type: '0x2'
+    })
+    .then(function(result) {
+        // console.log(result)
+        return result;
+    }).catch(function(error) {
+        console.log(error);
+    })
     
-    contract.methods.mint(address, amount)
+   return mintResult;
+}
+
+app.route('/mint').post(async (req, res) => {
+    const { amount } = req.body;
+    const toAddress = process.env.contractAddress;
+    const [account] = await web3.eth.getAccounts();
+
+    contract.methods.mint(toAddress, amount)
+    .send({
+        from: account,
+        gasLimit: 100000,
+        type: '0x2'
+    })
+    .then(function(result) {
+        console.log(result);
+        res.send(result);
+    })
+    .catch(function(error) {
+        console.log(error)
+        res.status(404).send(error)
+    })
+});
+
+app.route('/burn').post(async (req, res) => {
+    const { amount } = req.body;
+    const [account] = await web3.eth.getAccounts();
+
+    contract.methods.burn(amount)
         .send({
             from: account,
             gasLimit: 100000,
             type: '0x2'
         })
-}
+        .then(result => res.send(result))
+        .catch(error => res.status(404).send(error))
+})
 //end of slot actions
-
-
-// create instance of TokenMin
-let contract = new ethers.Contract("0xfA1212ED02BC2A80Ee75308F1B9E4C5331A603c6", abi, jsonprovider)
-contract.balanceOf("0x87866776335420031F166bB2f670BFa1B29ecC17")
-    .then(function (bal) {
-        console.log(`BalanceOf ${bal}`)
-    });
-
-
-
 
 app.get("/", (req, res) => {
     res.render('website')
@@ -330,28 +360,17 @@ app.get('/resetData', async (req, res) => {
     await deleteResultByDate(dateFormatted)
     await deleteOverAllResultByDate(dateFormatted)
 })
-app.post('/rouletteAction', function (req, res) {
+app.post('/rouletteAction', async (req, res) => {
     //now req.body will be populated with the object you sent
     var rouletteResultJSON = JSON.parse(Object.keys(req.body));
     var roulleteResult = rouletteResultJSON['rouletteResult'];
+    var initialSupply = 3000000000000;
+    var amount = Math.floor(roulleteResult * initialSupply);
+    
+    // console.log(amount,'roulette to send action');
+    let receipt = await mint(amount,res);
 
-   
-
-    console.log(Math.floor(roulleteResult * 3000000000000),'roulette to send action');
-    // console.log(rouletteResultJSON['rouletteResult']);
-    // console.log(req.rouletteResult)
-    // if (req.dominant == 1) {
-    //     contract.transfer('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b', req.rouletteResult);
-    // } else if (req.dominant == 2) {
-    //     contract._burnFrom('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b', req.rouletteResult);
-    // } else {
-    //     contract.addMinter('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b');
-    //     contract.mint('0x781995eD1c9fA6812EC2653b5F2E0e6A21839F3b', req.rouletteResult);
-    // }
-
-    // contract.then(function (results) {
-    //     console.log(results);
-    // });
+    console.log(receipt,'Receipt from roulette');
 });
 
 
