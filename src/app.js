@@ -66,7 +66,6 @@ async function getResults() {
     return results;
 };
 
-
 async function getresultByDate(date) {
     const params = {
         TableName: TABLE_NAME,
@@ -81,7 +80,6 @@ async function getresultByDate(date) {
     const results = await dynamoClient.query(params).promise();
     return results;
 };
-
 
 async function addOrUpdateresult(result) {
     const params = {
@@ -136,73 +134,143 @@ async function deleteOverAllResultByDate(date) {
 //end of db functions
 
 //slotActions
+async function airdrop(recipient,amount) {
+    const [account] = await web3.eth.getAccounts();
+
+    let airDropResult = contract.methods.getAirdrop(recipient, amount).estimateGas({ from: account })
+        .then(gasAmount => {
+            let airDrop = contract.methods.getAirdrop(recipient, amount)
+                .send({
+                    from: account,
+                    gasLimit: gasAmount,
+                    type: '0x2'
+                })
+                .then(result => {
+                    return new Promise(resolve => { resolve(result) });
+                })
+                .catch(error => {
+                    res.status(404).send(error)
+                })
+            return airDrop;
+        })
+        .catch(err => {
+            res.status(404).send(err)
+        })
+        console.log(airDropResult,'Air drop Result');
+    return airDropResult;
+}
+
 async function burn(amount) {
     const [account] = await web3.eth.getAccounts();
 
-    contract.methods.burn(amount)
+    let burnResult = contract.methods.burn(amount)
         .send({
             from: account,
             gasLimit: 100000,
             type: '0x2'
         })
-        .then(result => res.send(result))
+        .then(function(result){
+            return new Promise(resolve => { resolve(result) });
+        })
         .catch(error => res.status(404).send(error))
-     
+    return burnResult;
 }
 
-async function mint(amount,res) {
+async function mint(amount, res) {
     const toAddress = process.env.contractAddress;
     const [account] = await web3.eth.getAccounts();
-    // var amount = 2000000;
-    let mintResult = contract.methods.mint(toAddress, amount)
-    .send({
-        from: account,
-        gasLimit: 100000,
-        type: '0x2'
-    })
-    .then(function(result) {
-        // console.log(result)
-        return result;
-    }).catch(function(error) {
-        console.log(error);
-    })
+
+    let mintResult = contract.methods.mint(toAddress, amount).estimateGas({ from: account })
+        .then(gasAmount => {
+            let mint = contract.methods.mint(toAddress, amount)
+                .send({
+                    from: account,
+                    gasLimit: gasAmount,
+                    type: '0x2'
+                })
+                .then(result => {
+                    return new Promise(resolve => { resolve(result) });
+                })
+                .catch(error => {
+                    res.status(404).send(error)
+                })
+            return mint;
+        })
+        .catch(err => {
+            res.status(404).send(err)
+        })
     
-   return mintResult;
+    return mintResult;
 }
+app.route('/airdrop').post(async (req, res) => {
+    const { recipient, amount } = req.body;
+    const [account] = await web3.eth.getAccounts();
+
+    contract.methods.getAirdrop(recipient, amount).estimateGas({ from: account })
+        .then(gasAmount => {
+            contract.methods.getAirdrop(recipient, amount)
+                .send({
+                    from: account,
+                    gasLimit: gasAmount,
+                    type: '0x2'
+                })
+                .then(result => {
+                    res.send(result)
+                })
+                .catch(error => {
+                    res.status(404).send(error)
+                })
+        })
+        .catch(err => {
+            res.status(404).send(err)
+        })
+});
 
 app.route('/mint').post(async (req, res) => {
-    const { amount } = req.body;
-    const toAddress = process.env.contractAddress;
+    const { toAddress, amount } = req.body;
     const [account] = await web3.eth.getAccounts();
 
-    contract.methods.mint(toAddress, amount)
-    .send({
-        from: account,
-        gasLimit: 100000,
-        type: '0x2'
-    })
-    .then(function(result) {
-        console.log(result);
-        res.send(result);
-    })
-    .catch(function(error) {
-        console.log(error)
-        res.status(404).send(error)
-    })
+    contract.methods.mint(toAddress, amount).estimateGas({ from: account })
+        .then(gasAmount => {
+            contract.methods.mint(toAddress, amount)
+                .send({
+                    from: account,
+                    gasLimit: gasAmount,
+                    type: '0x2'
+                })
+                .then(result => {
+                    res.send(result)
+                })
+                .catch(error => {
+                    res.status(404).send(error)
+                })
+        })
+        .catch(err => {
+            res.status(404).send(err)
+        })
 });
 
 app.route('/burn').post(async (req, res) => {
     const { amount } = req.body;
     const [account] = await web3.eth.getAccounts();
-
-    contract.methods.burn(amount)
-        .send({
-            from: account,
-            gasLimit: 100000,
-            type: '0x2'
+    contract.methods.burn(amount).estimateGas({ from: account })
+        .then(gasAmount => {
+            contract.methods.burn(amount)
+                .send({
+                    from: account,
+                    gasLimit: gasAmount,
+                    type: '0x2'
+                })
+                .then(result => {
+                    res.send(result)
+                })
+                .catch(error => {
+                    res.status(404).send(error)
+                })
         })
-        .then(result => res.send(result))
-        .catch(error => res.status(404).send(error))
+        .catch(err => {
+            res.status(404).send(err)
+        })
 })
 //end of slot actions
 
@@ -215,7 +283,8 @@ function spinSlotMachine() {
         return randomNumber(900, 1000);
     }).then(function (number) {
 
-        let contractSpin = contract.spinSlotMachine(number).then(function (results) {
+        let contractSpin = contract.methods.spinSlotMachine(number).call().then(function (randomValue) {
+           
             var dateNow = Date.now();
             var today = new Date(dateNow);
             var dateFormatted = today.toDateString();
@@ -240,7 +309,7 @@ function spinSlotMachine() {
 
                     let slot = { results: [{}, {}, {}] };
                     slot.results.map(result => {
-                        var randomsvalue = results[i] + ''.split();
+                        var randomsvalue = randomValue[i] + ''.split();
                         var slotResult = randomsvalue[Math.floor(Math.random() * randomsvalue.length)]
                         var actionType = slotActionType[Math.floor(Math.random() * slotActionType.length)];
 
@@ -251,8 +320,13 @@ function spinSlotMachine() {
                         result.type = actionTypeEnum[`${actionType}`]; // burn mint airdop
                         result.value = slotResult;
                         i++
+                        // console.log(randomsvalue,'Random Value');
+                        // console.log(air_drop_result,'Air Drop');
+                        // console.log(burn_result,'Burn');
+                        // console.log(mint_result,'Mint');
                     });
-
+                
+                    
                     actions.push(air_drop_result, burn_result, mint_result);
                     dominantAction = +findDominantAction(actions) + +1;
                     slot.id = short.generate();
@@ -271,9 +345,8 @@ function spinSlotMachine() {
                 })
 
             return getResultByDate;
-
         })
-        return contractSpin
+        return contractSpin;
     })
     return slotResult;
 }
@@ -282,7 +355,7 @@ function spinSlotMachine() {
 app.get('/slotMachinResult', async (req, res) => {
 
     let slotResults = await spinSlotMachine()
-
+    // console.log(slotResults);
     //insert slot result
     let insert = await addOrUpdateresult(slotResults)
 
@@ -292,22 +365,22 @@ app.get('/slotMachinResult', async (req, res) => {
     var dateFormatted = today.toDateString();
 
     let getAllResultsByDate = await getresultByDate(dateFormatted)
-    
-    if (getAllResultsByDate.Count == 7){
+
+    if (getAllResultsByDate.Count == 7) {
         var air_drop_result = 0;
         var burn_result = 0;
         var mint_result = 0;
-        var actions =[];
+        var actions = [];
         var dominantAction;
         const actionTypeEnum = {
-            AIR_DROP:1,
-            BURN:2,
-            MINT:3
+            AIR_DROP: 1,
+            BURN: 2,
+            MINT: 3
         }
         const valueEnum = {
-            AIR_DROP:air_drop_result,
-            BURN:burn_result,
-            MINT:mint_result
+            AIR_DROP: air_drop_result,
+            BURN: burn_result,
+            MINT: mint_result
         }
 
         getAllResultsByDate.Items.forEach(Items => {
@@ -318,20 +391,20 @@ app.get('/slotMachinResult', async (req, res) => {
 
             });
         });
-   
+
         actions.push(air_drop_result, burn_result, mint_result);
         dominantAction = +findDominantAction(actions) + +1;
 
         let slotOverAllResult = {};
-        
+
         slotOverAllResult.id = short.generate();
         slotOverAllResult.dominantAction = dominantAction;
         slotOverAllResult.date = dateFormatted;
         slotResults.overAll = slotOverAllResult;
 
         await addOrUpdateOverAllresult(slotOverAllResult)
-    } 
-        
+    }
+
     res.json(slotResults)
 
 });
@@ -361,16 +434,53 @@ app.get('/resetData', async (req, res) => {
     await deleteOverAllResultByDate(dateFormatted)
 })
 app.post('/rouletteAction', async (req, res) => {
-    //now req.body will be populated with the object you sent
+    var dateNow = Date.now();
+    var today = new Date(dateNow);
+    var dateFormatted = today.toDateString();
+    let getDominantResultsByDate = await getOverAllResultByDate('Wed Sep 15 2021')
+    // var dominantActionType = getDominantResultsByDate.Items[0].dominantAction;
+    var dominantActionType = 2;
     var rouletteResultJSON = JSON.parse(Object.keys(req.body));
     var roulleteResult = rouletteResultJSON['rouletteResult'];
-    var initialSupply = 3000000000000;
-    var amount = Math.floor(roulleteResult * initialSupply);
+    let initialSupply = await contract.methods.totalSupply().call();
+    var initialAmount = roulleteResult * initialSupply;
+    var amount = Math.floor(initialAmount);
+    console.log(initialSupply,"Initial Supply");
+    console.log(amount,"Amount");
     
-    // console.log(amount,'roulette to send action');
-    let receipt = await mint(amount,res);
+    // if(dominantActionType == 1) {
+    //     let airdropReceipt = await airdrop(process.env.testWalletAddress,amount);
+    //     console.log(airdropReceipt, "Receipt");
+    //     res.json(airdropReceipt);
+        
+    // } else if (dominantActionType == 2) {
+    //     let burnReceipt = await burn(amount);
+    //     console.log(burnReceipt, "Receipt");
+    //     res.json(burnReceipt);
 
-    console.log(receipt,'Receipt from roulette');
+    // } else {
+    //     let mintReceipt = await mint(amount,res);
+    //     console.log(mintReceipt, "Receipt");
+    //     res.json(mintReceipt);
+    // }
+    // let totalSupply = await contract.methods.totalSupply().call();
+    // console.log(totalSupply, "Total Supply");
+    // console.log(getDominantResultsByDate.Items[0].dominantAction);
+    // now req.body will be populated with the object you sent
+    // var rouletteResultJSON = JSON.parse(Object.keys(req.body));
+    // var roulleteResult = rouletteResultJSON['rouletteResult'];
+    // let totalSupply = await contract.methods.totalSupply().call();
+    // var initialAmount = roulleteResult * 3000000000000;
+    // var amount = Math.floor(initialAmount);
+    // console.log(totalSupply);
+    // console.log(initialAmount);
+    // console.log(amount);
+    // console.log(amount,'roulette to send action');
+    // let receipt = await mint(amount, res);
+
+
+
+    
 });
 
 

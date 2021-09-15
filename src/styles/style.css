@@ -364,14 +364,11 @@ footer{
   background-image: linear-gradient(black, rgb(251 189 24));
   border-top: 20px solid black;
   border-radius: 17px;
-  height: 550px;
-  max-width: 900px;
-  margin: 6px;  
 }
 
 #wheelcanvas {
-  height: 400px;
-  width: 400px;
+  height: 223px;
+  width: 223px;
 }
 
 .form-control {

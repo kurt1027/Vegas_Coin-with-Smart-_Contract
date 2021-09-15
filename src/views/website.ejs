@@ -89,9 +89,12 @@
                             </div>
                             <p class="lead">Purchase $VEGASCOIN on Gate.io (startup is TBD)</p>
                         </div>
-
-                        <%- include('src/../partial_view/slot-machine.ejs') %>  
-
+                        <div class="card-group">
+                            <%- include('src/../partial_view/slot-machine.ejs') %>  
+                
+                            <%- include('src/../partial_view/roulette.ejs') %> 
+                        </div>
+                        
                         <div class="col-sm-10 wow fadeIn" data-wow-delay="0.5s">
                             <div class="pre-sale-timer-outer">
                                 <div class="pre-sale-timer style-2">
@@ -125,7 +128,7 @@
 
                         </div>
                         <br>
-                        <%- include('src/../partial_view/roulette.ejs') %> 
+                        
                     </div>
                 </div>
             </div>
@@ -630,7 +633,7 @@
     <script src="js/jquery.countdown.js"></script>
     <script src="js/owl.carousel.js"></script>
     <script src="js/Chart.js"></script>
-    <script src="js/chart-function.js"></script>
+    <!-- <script src="js/chart-function.js"></script> -->
     <script src="js/script.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/gold-app.js"></script>
@@ -748,9 +751,9 @@
             // document.getElementById("actionResultRoullete").innerHTML = '';
         }
         
-        var colors = ["green", "black", "red", "black", "red",
-                     "black", "red", "black", "red", "black", "red", "black", "red",
-                     "black", "red", "black", "red", "black", "red", "green", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black"];
+        var colors = ["green", "black", "#fbbd18", "black", "yellow",
+                     "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18",
+                     "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "green", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black", "#fbbd18", "black"];
         var number = ["0", "28", "9", "26",
                            "30", "11", "7", "20",
                            "32", "17", "5", "22", "34", "15", "3", "24", "36", "13", "1", "00", "27", "10", "25", "29", "12", "8", "19", "31", "18", "6", "21", "33", "16", "4", "23", "35", "14", "2"];
@@ -783,7 +786,7 @@
             
             
             ctx.strokeStyle = "#000";
-            ctx.lineWidth = 10;
+            ctx.lineWidth = 15;
             
             ctx.font = 'bold 20px Arial';
             
@@ -865,6 +868,13 @@
             var sendString = JSON.stringify(send);
             
             var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.response);
+                }
+            }
+
             xhr.open("POST", '/rouletteAction', true);
 
             //Send the proper header information along with the request
