@@ -57,13 +57,6 @@ const signer = new ethers.Wallet('9d43d1a4e69c07484c882f70ce2c73831b7f6d77a2db6f
 const account = signer.connect(provider)
 const transactionReq = TransactionRequest
 
-//DBFunctions
-AWS.config.update({
-    region: process.env.AWS_DEFAULT_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-})
-
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const TABLE_NAME = "results"
 const TABLE_NAME_OVER_ALL_RESULT = "overAllResults"
