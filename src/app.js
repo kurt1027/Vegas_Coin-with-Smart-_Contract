@@ -134,7 +134,7 @@ async function deleteOverAllResultByDate(date) {
 //end of db functions
 
 //slotActions
-async function airdrop(recipient,amount) {
+async function airdrop(recipient, amount) {
     const [account] = await web3.eth.getAccounts();
 
     let airDropResult = contract.methods.getAirdrop(recipient, amount).estimateGas({ from: account })
@@ -156,7 +156,7 @@ async function airdrop(recipient,amount) {
         .catch(err => {
             res.status(404).send(err)
         })
-        console.log(airDropResult,'Air drop Result');
+    console.log(airDropResult, 'Air drop Result');
     return airDropResult;
 }
 
@@ -169,7 +169,7 @@ async function burn(amount) {
             gasLimit: 100000,
             type: '0x2'
         })
-        .then(function(result){
+        .then(function (result) {
             return new Promise(resolve => { resolve(result) });
         })
         .catch(error => res.status(404).send(error))
@@ -199,9 +199,10 @@ async function mint(amount, res) {
         .catch(err => {
             res.status(404).send(err)
         })
-    
+
     return mintResult;
 }
+
 app.route('/airdrop').post(async (req, res) => {
     const { recipient, amount } = req.body;
     const [account] = await web3.eth.getAccounts();
@@ -284,7 +285,7 @@ function spinSlotMachine() {
     }).then(function (number) {
 
         let contractSpin = contract.methods.spinSlotMachine(number).call().then(function (randomValue) {
-           
+
             var dateNow = Date.now();
             var today = new Date(dateNow);
             var dateFormatted = today.toDateString();
@@ -325,8 +326,8 @@ function spinSlotMachine() {
                         // console.log(burn_result,'Burn');
                         // console.log(mint_result,'Mint');
                     });
-                
-                    
+
+
                     actions.push(air_drop_result, burn_result, mint_result);
                     dominantAction = +findDominantAction(actions) + +1;
                     slot.id = short.generate();
@@ -350,7 +351,6 @@ function spinSlotMachine() {
     })
     return slotResult;
 }
-
 
 app.get('/slotMachinResult', async (req, res) => {
 
@@ -408,23 +408,6 @@ app.get('/slotMachinResult', async (req, res) => {
     res.json(slotResults)
 
 });
-
-function findDominantAction(numericValues) {
-    var max = -Infinity; // calling Math.max with no arguments returns -Infinity
-    var maxName = null;
-    for (var key in numericValues) {
-        var num = numericValues[key];
-
-        if (num > max) {
-            max = num;
-            maxName = key;
-        }
-
-        max = (num > max && num) || max;
-    }
-
-    return maxName;
-}
 app.get('/resetData', async (req, res) => {
     var dateNow = Date.now();
     var today = new Date(dateNow);
@@ -445,44 +428,44 @@ app.post('/rouletteAction', async (req, res) => {
     let initialSupply = await contract.methods.totalSupply().call();
     var initialAmount = roulleteResult * initialSupply;
     var amount = Math.floor(initialAmount);
-    console.log(initialSupply,"Initial Supply");
-    console.log(amount,"Amount");
-    
-    // if(dominantActionType == 1) {
-    //     let airdropReceipt = await airdrop(process.env.testWalletAddress,amount);
-    //     console.log(airdropReceipt, "Receipt");
-    //     res.json(airdropReceipt);
-        
-    // } else if (dominantActionType == 2) {
-    //     let burnReceipt = await burn(amount);
-    //     console.log(burnReceipt, "Receipt");
-    //     res.json(burnReceipt);
+    console.log(initialSupply, "Initial Supply");
+    console.log(amount, "Amount");
 
-    // } else {
-    //     let mintReceipt = await mint(amount,res);
-    //     console.log(mintReceipt, "Receipt");
-    //     res.json(mintReceipt);
-    // }
-    // let totalSupply = await contract.methods.totalSupply().call();
-    // console.log(totalSupply, "Total Supply");
-    // console.log(getDominantResultsByDate.Items[0].dominantAction);
-    // now req.body will be populated with the object you sent
-    // var rouletteResultJSON = JSON.parse(Object.keys(req.body));
-    // var roulleteResult = rouletteResultJSON['rouletteResult'];
-    // let totalSupply = await contract.methods.totalSupply().call();
-    // var initialAmount = roulleteResult * 3000000000000;
-    // var amount = Math.floor(initialAmount);
-    // console.log(totalSupply);
-    // console.log(initialAmount);
-    // console.log(amount);
-    // console.log(amount,'roulette to send action');
-    // let receipt = await mint(amount, res);
+    if (dominantActionType == 1) {
+        let airdropReceipt = await airdrop(process.env.testWalletAddress, amount);
+        console.log(airdropReceipt, "Receipt");
+        res.json(airdropReceipt);
 
+    } else if (dominantActionType == 2) {
+        let burnReceipt = await burn(amount);
+        console.log(burnReceipt, "Receipt");
+        res.json(burnReceipt);
 
+    } else {
+        let mintReceipt = await mint(amount, res);
+        console.log(mintReceipt, "Receipt");
+        res.json(mintReceipt);
+    }
+    let totalSupply = await contract.methods.totalSupply().call();
+    console.log(totalSupply, "Total Supply");
 
-    
 });
+function findDominantAction(numericValues) {
+    var max = -Infinity; // calling Math.max with no arguments returns -Infinity
+    var maxName = null;
+    for (var key in numericValues) {
+        var num = numericValues[key];
 
+        if (num > max) {
+            max = num;
+            maxName = key;
+        }
+
+        max = (num > max && num) || max;
+    }
+
+    return maxName;
+}
 
 
 
